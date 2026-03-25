@@ -5,8 +5,6 @@ type SourceRailProps = {
   selectedDocumentId: string | null;
   onSelectDocument: (documentId: string) => void;
   documentDetail: DocumentDetail | null;
-  uploadInputId: string;
-  uploading: boolean;
 };
 
 export function SourceRail(props: SourceRailProps) {
@@ -15,8 +13,6 @@ export function SourceRail(props: SourceRailProps) {
     selectedDocumentId,
     onSelectDocument,
     documentDetail,
-    uploadInputId,
-    uploading,
   } = props;
 
   const currentDocument = documents.find((item) => item.id === selectedDocumentId) ?? null;
@@ -30,9 +26,6 @@ export function SourceRail(props: SourceRailProps) {
             <p className="panel-label">课件与笔记</p>
             <h2>复习资料</h2>
           </div>
-          <label className="mini-action" htmlFor={uploadInputId}>
-            {uploading ? "处理中" : "上传"}
-          </label>
         </div>
         <p className="support-copy">
           上传课件后会自动生成学习笔记。这里保留当前课件、章节笔记摘要和切换入口，不再展示片段来源。

@@ -47,7 +47,6 @@ function App() {
   const [completedTaskIds, setCompletedTaskIds] = useState<Record<string, boolean>>(
     {},
   );
-  const [isMarkdownExpanded, setIsMarkdownExpanded] = useState(false);
   const [assessment, setAssessment] = useState<AssessmentSuite | null>(null);
   const [assessmentLoading, setAssessmentLoading] = useState(false);
   const [assessmentAnswers, setAssessmentAnswers] = useState<Record<string, string>>(
@@ -104,7 +103,6 @@ function App() {
       setErrorMessage(null);
       setMarkdownPreview(null);
       setCompactPane("chat");
-      setIsMarkdownExpanded(false);
 
       const detail = await fetchDocumentDetail(documentId);
       const markdown = detail.markdown_path
@@ -238,10 +236,66 @@ function App() {
   }
 
   const uploadInputId = "global-upload-input";
-  const exportHref =
-    documentDetail?.markdown_path && documentDetail.id
-      ? markdownDownloadUrl(documentDetail.id)
-      : null;
+  const canExport = Boolean(documentDetail && markdownPreview);
+
+  function exportReviewReport() {
+    if (!documentDetail || !markdownPreview) {
+      return;
+    }
+
+    const lines: string[] = [
+      `# ${documentDetail.title} 复习记录`,
+      "",
+      markdownPreview.content.trim(),
+      "",
+      "## Learning Board 完成情况",
+      "",
+    ];
+
+    for (const item of [
+      ...documentDetail.learning_board.summary,
+      ...documentDetail.learning_board.concepts,
+      ...documentDetail.learning_board.practice,
+      ...documentDetail.learning_board.review_path,
+    ]) {
+      const label =
+        "term" in item
+          ? item.term
+          : "prompt" in item
+            ? item.prompt
+            : item.title;
+      const checked = completedTaskIds[item.id] ? "已完成" : "未完成";
+      lines.push(`- [${checked}] ${label}`);
+    }
+
+    if (assessment && assessmentSubmitted) {
+      lines.push("", `## ${assessment.title}`, "", assessment.intro, "");
+      assessment.questions.forEach((question) => {
+        const answer = assessmentAnswers[question.id] ?? "未作答";
+        const isCorrect =
+          question.type === "choice"
+            ? answer === question.answer
+            : [question.answer, ...question.acceptable_answers]
+                .map(normalizeAnswer)
+                .includes(normalizeAnswer(answer));
+        lines.push(`### ${question.prompt}`);
+        lines.push(`- 你的答案：${answer}`);
+        lines.push(`- 结果：${isCorrect ? "正确" : "错误"}`);
+        lines.push(`- 正确答案：${question.answer}`);
+        lines.push(`- 解析：${question.explanation}`, "");
+      });
+    }
+
+    const blob = new Blob([lines.join("\n")], {
+      type: "text/markdown;charset=utf-8",
+    });
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement("a");
+    anchor.href = url;
+    anchor.download = `${documentDetail.title}-复习记录.md`;
+    anchor.click();
+    URL.revokeObjectURL(url);
+  }
 
   return (
     <div className="app-shell">
@@ -264,7 +318,8 @@ function App() {
         documentDetail={documentDetail}
         uploadInputId={uploadInputId}
         uploading={uploading}
-        exportHref={exportHref}
+        canExport={canExport}
+        onExport={exportReviewReport}
       />
 
       {errorMessage ? (
@@ -300,8 +355,6 @@ function App() {
             selectedDocumentId={selectedDocumentId}
             onSelectDocument={handleSelectDocument}
             documentDetail={documentDetail}
-            uploadInputId={uploadInputId}
-            uploading={uploading}
           />
         </aside>
 
@@ -336,8 +389,6 @@ function App() {
             totalTasks={boardStats.total}
             progressRatio={boardStats.ratio}
             markdownPreview={markdownPreview}
-            exportHref={exportHref}
-            isMarkdownExpanded={isMarkdownExpanded}
             isAssessmentUnlocked={isAssessmentUnlocked}
             assessment={assessment}
             assessmentLoading={assessmentLoading}
@@ -345,7 +396,6 @@ function App() {
             assessmentSubmitted={assessmentSubmitted}
             onToggleTask={toggleTask}
             onUsePrompt={usePrompt}
-            onToggleMarkdown={() => setIsMarkdownExpanded((value) => !value)}
             onAnswerChange={updateAssessmentAnswer}
             onSubmitAssessment={submitAssessment}
             onRetryAssessment={retryAssessment}
@@ -423,3 +473,7 @@ function readInitialUiState(): {
 }
 
 export default App;
+
+function normalizeAnswer(value: string): string {
+  return value.trim().toLowerCase().replace(/\s+/g, "");
+}

@@ -4,11 +4,12 @@ type TopBarProps = {
   documentDetail: DocumentDetail | null;
   uploadInputId: string;
   uploading: boolean;
-  exportHref: string | null;
+  canExport: boolean;
+  onExport: () => void;
 };
 
 export function TopBar(props: TopBarProps) {
-  const { documentDetail, uploadInputId, uploading, exportHref } = props;
+  const { documentDetail, uploadInputId, uploading, canExport, onExport } = props;
 
   return (
     <header className="topbar">
@@ -32,11 +33,14 @@ export function TopBar(props: TopBarProps) {
           <label className="action-button is-primary" htmlFor={uploadInputId}>
             {uploading ? "处理中…" : "上传课件"}
           </label>
-          {exportHref ? (
-            <a className="action-button" href={exportHref}>
-              导出 Markdown
-            </a>
-          ) : null}
+          <button
+            type="button"
+            className="action-button"
+            disabled={!canExport}
+            onClick={onExport}
+          >
+            导出复习记录
+          </button>
         </div>
       </div>
     </header>

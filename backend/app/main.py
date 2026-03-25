@@ -136,7 +136,7 @@ def chat_with_document(document_id: str, payload: ChatRequest):
 
     recent_history = [
         f"Q: {chat.question}\nA: {chat.answer}"
-        for chat in repository.get_recent_chats(document_id, limit=3)
+        for chat in repository.get_recent_chats(document_id, limit=8)
     ]
     answer = QwenClient().answer_question(
         document_title=detail.title,
@@ -197,6 +197,14 @@ def _build_retrieval_records(detail, scope: str) -> list[dict[str, str | int | N
     if scope in {"raw", "all"}:
         records.extend(repository.get_fragments(detail.id))
     if scope in {"notes", "all"}:
+        if detail.learning_board.overview:
+            records.append(
+                {
+                    "source_label": "学习任务台总览",
+                    "title": "学习任务总览",
+                    "content": detail.learning_board.overview,
+                }
+            )
         for section in detail.sections:
             records.append(
                 {

@@ -9,8 +9,6 @@ type LearningBoardPanelProps = {
   totalTasks: number;
   progressRatio: number;
   markdownPreview: MarkdownPreview | null;
-  exportHref: string | null;
-  isMarkdownExpanded: boolean;
   isAssessmentUnlocked: boolean;
   assessment: AssessmentSuite | null;
   assessmentLoading: boolean;
@@ -18,7 +16,6 @@ type LearningBoardPanelProps = {
   assessmentSubmitted: boolean;
   onToggleTask: (taskId: string) => void;
   onUsePrompt: (prompt: string) => void;
-  onToggleMarkdown: () => void;
   onAnswerChange: (questionId: string, value: string) => void;
   onSubmitAssessment: () => void;
   onRetryAssessment: () => void;
@@ -32,8 +29,6 @@ export function LearningBoardPanel(props: LearningBoardPanelProps) {
     totalTasks,
     progressRatio,
     markdownPreview,
-    exportHref,
-    isMarkdownExpanded,
     isAssessmentUnlocked,
     assessment,
     assessmentLoading,
@@ -41,7 +36,6 @@ export function LearningBoardPanel(props: LearningBoardPanelProps) {
     assessmentSubmitted,
     onToggleTask,
     onUsePrompt,
-    onToggleMarkdown,
     onAnswerChange,
     onSubmitAssessment,
     onRetryAssessment,
@@ -193,36 +187,20 @@ export function LearningBoardPanel(props: LearningBoardPanelProps) {
                 ))}
               </article>
 
-              <article className="board-module export-module">
-                <header className="board-module-head">
-                  <div>
-                    <p className="module-kicker">学习笔记</p>
-                    <h3>Markdown 导出</h3>
-                  </div>
-                </header>
-                <p className="export-copy">
-                  学习笔记会自动生成。需要时再下载，不打断当前复习节奏。
-                </p>
-                <div className="export-actions">
-                  {exportHref ? (
-                    <a className="action-button export-primary" href={exportHref}>
-                      下载 Markdown
-                    </a>
-                  ) : null}
-                  {markdownPreview ? (
-                    <button
-                      type="button"
-                      className="action-button export-secondary"
-                      onClick={onToggleMarkdown}
-                    >
-                      {isMarkdownExpanded ? "收起预览" : "展开预览"}
-                    </button>
-                  ) : null}
+            <article className="board-module export-module">
+              <header className="board-module-head">
+                <div>
+                  <p className="module-kicker">学习笔记</p>
+                  <h3>复习记录导出</h3>
                 </div>
-                {isMarkdownExpanded && markdownPreview ? (
-                  <pre className="markdown-preview">{markdownPreview.content}</pre>
-                ) : null}
-              </article>
+              </header>
+              <p className="export-copy">
+                下载按钮统一保留在顶部工具栏。导出时会包含学习笔记、Learning Board 完成情况，以及测试环境里的答题结果和解析。
+              </p>
+              {markdownPreview ? (
+                <pre className="markdown-preview">{markdownPreview.content}</pre>
+              ) : null}
+            </article>
             </div>
           ) : (
             <div className="assessment-shell">
