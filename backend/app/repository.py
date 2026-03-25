@@ -46,6 +46,7 @@ def update_document(
     *,
     status: str | None = None,
     title: str | None = None,
+    learning_board: LearningBoard | None = None,
     markdown_path: str | None = None,
     error_message: str | None = None,
 ) -> None:
@@ -57,6 +58,9 @@ def update_document(
     if title is not None:
         fields.append("title = ?")
         values.append(title)
+    if learning_board is not None:
+        fields.append("learning_board_json = ?")
+        values.append(json.dumps(learning_board.model_dump(), ensure_ascii=False))
     if markdown_path is not None:
         fields.append("markdown_path = ?")
         values.append(markdown_path)
@@ -116,7 +120,7 @@ def save_sections(document_id: str, sections: Iterable[GeneratedSection]) -> Non
                     section.title,
                     section.detailed_explanation,
                     json.dumps(section.key_points, ensure_ascii=False),
-                    json.dumps(section.quiz, ensure_ascii=False),
+                    json.dumps([], ensure_ascii=False),
                     json.dumps(section.source_refs, ensure_ascii=False),
                 )
                 for section in sections
@@ -239,12 +243,18 @@ def get_document_detail(document_id: str) -> DocumentDetail | None:
         ).fetchall()
     summary = _build_document_summary(document_row)
     sections = [_build_section_note(row) for row in section_rows]
+    if document_row["learning_board_json"]:
+        learning_board = LearningBoard.model_validate(
+            json.loads(document_row["learning_board_json"])
+        )
+    else:
+        learning_board = build_learning_board(summary.title, sections)
     return DocumentDetail(
         **summary.model_dump(),
         sections=sections,
         chats=[_build_chat_record(row) for row in chat_rows],
         sources=[_build_source_fragment(row) for row in fragment_rows],
-        learning_board=build_learning_board(summary.title, sections),
+        learning_board=learning_board,
     )
 
 
@@ -268,7 +278,6 @@ def _build_section_note(row) -> SectionNote:
         title=row["title"],
         detailed_explanation=row["detailed_explanation"],
         key_points=json.loads(row["key_points_json"]),
-        quiz=json.loads(row["quiz_json"]),
         source_refs=json.loads(row["source_refs_json"]),
     )
 

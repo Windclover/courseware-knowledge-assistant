@@ -26,7 +26,6 @@ class GeneratedSection:
     title: str
     detailed_explanation: str
     key_points: list[str]
-    quiz: list[str]
     source_refs: list[str]
 
 

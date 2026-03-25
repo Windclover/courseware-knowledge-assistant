@@ -7,6 +7,16 @@ from pptx import Presentation
 from backend.app.domain import ChatAnswerResult, GeneratedSection
 import backend.app.main as main_module
 import backend.app.services.pipeline as pipeline_module
+from backend.app.schemas import (
+    AssessmentQuestion,
+    AssessmentQuestionOption,
+    AssessmentSuite,
+    LearningBoard,
+    LearningConceptItem,
+    LearningPracticeItem,
+    LearningReviewStep,
+    LearningSummaryItem,
+)
 
 
 TMP_DIR = Path("tmp")
@@ -22,12 +32,74 @@ class FakeQwen:
                 "监督学习依赖带标签数据",
                 "分类与回归是典型任务",
             ],
-            quiz=[
-                "什么是监督学习？",
-                "分类任务与回归任务有何区别？",
-                "带标签数据有什么作用？",
-            ],
             source_refs=draft.source_refs,
+        )
+
+    def generate_learning_board(self, *, document_title, sections):
+        return LearningBoard(
+            overview=f"《{document_title}》的复习重点是先理解监督学习，再区分分类与回归。",
+            summary=[
+                LearningSummaryItem(
+                    id="summary-1",
+                    title=sections[0].title,
+                    summary="监督学习依赖带标签数据。",
+                    source_refs=sections[0].source_refs,
+                )
+            ],
+            concepts=[
+                LearningConceptItem(
+                    id="concept-1",
+                    term="监督学习",
+                    explanation="监督学习通过带标签样本建立输入到输出的映射。",
+                    section_title=sections[0].title,
+                    source_refs=sections[0].source_refs,
+                )
+            ],
+            practice=[
+                LearningPracticeItem(
+                    id="practice-1",
+                    prompt="判断一个案例属于分类还是回归。",
+                    section_title=sections[0].title,
+                    source_refs=sections[0].source_refs,
+                )
+            ],
+            review_path=[
+                LearningReviewStep(
+                    id="review-1",
+                    title="先看摘要再看概念",
+                    detail="先读摘要，再理解监督学习与分类/回归的关系。",
+                    source_refs=sections[0].source_refs,
+                )
+            ],
+        )
+
+    def generate_assessment(self, *, document_title, sections, learning_board):
+        return AssessmentSuite(
+            title=f"{document_title} 测试环境",
+            intro="完成学习任务后开始答题。",
+            questions=[
+                AssessmentQuestion(
+                    id="q1",
+                    type="choice",
+                    prompt="监督学习依赖什么数据？",
+                    options=[
+                        AssessmentQuestionOption(id="A", text="带标签数据"),
+                        AssessmentQuestionOption(id="B", text="随机噪声"),
+                    ],
+                    answer="A",
+                    acceptable_answers=[],
+                    explanation="监督学习通过带标签样本学习输入到输出的映射。",
+                ),
+                AssessmentQuestion(
+                    id="q2",
+                    type="blank",
+                    prompt="分类与____是两类典型监督学习任务。",
+                    options=[],
+                    answer="回归",
+                    acceptable_answers=["回归"],
+                    explanation="课件中明确指出分类与回归是典型监督学习任务。",
+                ),
+            ],
         )
 
     def answer_question(self, **kwargs):
@@ -98,6 +170,16 @@ def main() -> None:
         )
         chat_payload = chat_response.json()
         print("chat", chat_response.status_code, chat_payload["source_refs"])
+
+        assessment_response = client.post(
+            f"/api/documents/{last_document_id}/assessment"
+        )
+        assessment_payload = assessment_response.json()
+        print(
+            "assessment",
+            assessment_response.status_code,
+            len(assessment_payload["questions"]),
+        )
 
 
 if __name__ == "__main__":

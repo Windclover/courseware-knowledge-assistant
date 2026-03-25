@@ -78,6 +78,27 @@ export interface LearningBoard {
   review_path: LearningReviewStep[];
 }
 
+export interface AssessmentQuestionOption {
+  id: string;
+  text: string;
+}
+
+export interface AssessmentQuestion {
+  id: string;
+  type: "choice" | "blank";
+  prompt: string;
+  options: AssessmentQuestionOption[];
+  answer: string;
+  acceptable_answers: string[];
+  explanation: string;
+}
+
+export interface AssessmentSuite {
+  title: string;
+  intro: string;
+  questions: AssessmentQuestion[];
+}
+
 export interface DocumentDetail extends DocumentSummary {
   sections: SectionNote[];
   chats: ChatRecord[];

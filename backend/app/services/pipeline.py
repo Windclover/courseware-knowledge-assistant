@@ -24,6 +24,13 @@ def process_saved_document(document_id: str, file_path: Path) -> DocumentDetail:
         ai_client.generate_section(document_title, draft) for draft in section_drafts
     ]
     repository.save_sections(document_id, generated_sections)
+    detail = repository.get_document_detail(document_id)
+    if detail is None:
+        raise RuntimeError("文档章节生成后未能读取详情。")
+    learning_board = ai_client.generate_learning_board(
+        document_title=document_title,
+        sections=detail.sections,
+    )
 
     settings = get_settings()
     markdown_path = write_markdown(
@@ -35,6 +42,7 @@ def process_saved_document(document_id: str, file_path: Path) -> DocumentDetail:
     repository.update_document(
         document_id,
         status="ready",
+        learning_board=learning_board,
         markdown_path=str(markdown_path.relative_to(settings.root_dir)),
         error_message="",
     )

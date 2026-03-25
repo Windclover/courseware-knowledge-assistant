@@ -77,3 +77,9 @@
   - 验收标准：真实页面 loaded state 在结构、按钮层级、信息密度上接近 Pencil 稿；本地开发端口变化时不再触发 `Failed to fetch`。
   - 证据：`frontend/src/App.tsx`；`frontend/src/components/TopBar.tsx`；`frontend/src/components/SourceRail.tsx`；`frontend/src/components/ChatStage.tsx`；`frontend/src/components/LearningBoard.tsx`；`frontend/src/styles.css`；`backend/app/config.py`；`backend/app/main.py`；`run_local.sh`
   - 已验证：`npm run build` 成功；`tmp/current_ui_rewrite_loaded.png` 已与 `designs/exports/r0GqG.png` 做视觉对照。
+
+- [x] Phase 13：产品重构为“课件智能知识点复习助手”
+  - 计划：将产品从“提取助手”调整为“复习助手”，移除片段来源展示，改成单一对话区 + AI 规划学习任务台，并在任务完成后进入测试环境。
+  - 验收标准：UI 中不再展示来源片段；上传后自动生成学习笔记；Learning Board 由 AI 规划；全部勾选后进入选择题/填空题测试环境；构建与烟测通过。
+  - 证据：`backend/app/services/ai_client.py`；`backend/app/services/learning_board.py`；`backend/app/main.py`；`frontend/src/App.tsx`；`frontend/src/components/ChatStage.tsx`；`frontend/src/components/LearningBoard.tsx`；`frontend/src/components/SourceRail.tsx`；`frontend/src/components/TopBar.tsx`
+  - 已验证：`npm run build` 成功；`conda run -n assistant python -m compileall backend` 成功；`tmp/test_smoke.py` 已验证 assessment 接口返回 `200`。

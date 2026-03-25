@@ -1,4 +1,1979 @@
 {
   "version": "2.9",
-  "children": []
+  "children": [
+    {
+      "type": "frame",
+      "id": "r0GqG",
+      "x": -478,
+      "y": -348,
+      "name": "Learning Research Desk / Desktop",
+      "width": 1440,
+      "height": 980,
+      "fill": "#F4F6F9",
+      "layout": "vertical",
+      "gap": 18,
+      "padding": [
+        20,
+        20,
+        24,
+        20
+      ],
+      "children": [
+        {
+          "type": "frame",
+          "id": "sp0mH",
+          "name": "Top Bar",
+          "width": "fill_container",
+          "height": 86,
+          "fill": "#FBFCFD",
+          "cornerRadius": 20,
+          "stroke": {
+            "thickness": 1,
+            "fill": "#D7DEE7"
+          },
+          "padding": [
+            18,
+            20
+          ],
+          "justifyContent": "space_between",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "frame",
+              "id": "7WTon",
+              "name": "Brand",
+              "gap": 12,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "hsGOU",
+                  "name": "brandIcon",
+                  "width": 44,
+                  "height": 44,
+                  "fill": "#FFFFFF",
+                  "cornerRadius": 12,
+                  "stroke": {
+                    "thickness": 1,
+                    "fill": "#D8E0E9"
+                  },
+                  "layout": "vertical",
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "558uH",
+                      "name": "brandGlyph",
+                      "fill": "#203243",
+                      "content": "研",
+                      "fontFamily": "Georgia",
+                      "fontSize": 18,
+                      "fontWeight": "600"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "u7tQ6",
+                  "name": "brandCopy",
+                  "layout": "vertical",
+                  "gap": 4,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "LGeMQ",
+                      "name": "brandKicker",
+                      "fill": "#8D98A6",
+                      "content": "Courseware Research Desk",
+                      "fontFamily": "Inter",
+                      "fontSize": 11,
+                      "fontWeight": "600",
+                      "letterSpacing": 1.2
+                    },
+                    {
+                      "type": "text",
+                      "id": "TS08L",
+                      "name": "brandTitle",
+                      "fill": "#12161D",
+                      "content": "课件智能知识点提取助手",
+                      "fontFamily": "Inter",
+                      "fontSize": 20,
+                      "fontWeight": "700"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "dbUs5",
+              "name": "metaWrap",
+              "gap": 10,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "AMD9y",
+                  "name": "docChip",
+                  "width": 300,
+                  "fill": "#FFFFFF",
+                  "cornerRadius": 14,
+                  "stroke": {
+                    "thickness": 1,
+                    "fill": "#D8E0E9"
+                  },
+                  "layout": "vertical",
+                  "gap": 4,
+                  "padding": [
+                    12,
+                    14
+                  ],
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "irSWV",
+                      "name": "docChipLabel",
+                      "fill": "#8D98A6",
+                      "content": "当前课件",
+                      "fontFamily": "Inter",
+                      "fontSize": 11,
+                      "fontWeight": "600",
+                      "letterSpacing": 1.2
+                    },
+                    {
+                      "type": "text",
+                      "id": "l8PX8",
+                      "name": "docChipTitle",
+                      "fill": "#12161D",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "机器学习导论 / 第 3 讲：监督学习",
+                      "fontFamily": "Inter",
+                      "fontSize": 14,
+                      "fontWeight": "600"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "btx9M",
+                  "name": "uploadBtn",
+                  "fill": "#2F475D",
+                  "cornerRadius": 999,
+                  "padding": [
+                    10,
+                    16
+                  ],
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "PnoB7",
+                      "name": "uploadText",
+                      "fill": "#FFFFFF",
+                      "content": "上传课件",
+                      "fontFamily": "Inter",
+                      "fontSize": 13,
+                      "fontWeight": "600"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "gw9WX",
+                  "name": "exportBtn",
+                  "fill": "#FFFFFF",
+                  "cornerRadius": 999,
+                  "stroke": {
+                    "thickness": 1,
+                    "fill": "#D8E0E9"
+                  },
+                  "padding": [
+                    10,
+                    16
+                  ],
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "ORzDv",
+                      "name": "exportText",
+                      "fill": "#2F475D",
+                      "content": "导出 Markdown",
+                      "fontFamily": "Inter",
+                      "fontSize": 13,
+                      "fontWeight": "600"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "1xWk0",
+          "name": "Body",
+          "width": "fill_container",
+          "height": "fill_container",
+          "gap": 18,
+          "children": [
+            {
+              "type": "frame",
+              "id": "H2isD",
+              "name": "Sources Rail",
+              "width": 264,
+              "height": "fill_container",
+              "fill": "#FAFBFC",
+              "cornerRadius": 24,
+              "stroke": {
+                "thickness": 1,
+                "fill": "#D7DEE7"
+              },
+              "layout": "vertical",
+              "gap": 14,
+              "padding": 18,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "mxrB7",
+                  "name": "leftIntro",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 8,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "0UXdd",
+                      "name": "leftLabel",
+                      "fill": "#8D98A6",
+                      "content": "资料架",
+                      "fontFamily": "Inter",
+                      "fontSize": 11,
+                      "fontWeight": "600",
+                      "letterSpacing": 1.2
+                    },
+                    {
+                      "type": "text",
+                      "id": "rkbFF",
+                      "name": "leftTitle",
+                      "fill": "#12161D",
+                      "content": "来源与课件",
+                      "fontFamily": "Inter",
+                      "fontSize": 24,
+                      "fontWeight": "700"
+                    },
+                    {
+                      "type": "text",
+                      "id": "y7Jsn",
+                      "name": "leftDesc",
+                      "fill": "#677280",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "把原始课件、来源片段和页码依据收纳在一起。点击任何片段，中央对话区和右侧学习任务都会同步聚焦。",
+                      "lineHeight": 1.5,
+                      "fontFamily": "Inter",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "RGGX2",
+                  "name": "leftDocStack",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 8,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "yuWE7",
+                      "name": "leftDocTitle",
+                      "fill": "#677280",
+                      "content": "课件列表",
+                      "fontFamily": "Inter",
+                      "fontSize": 12,
+                      "fontWeight": "600"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "f0Z6D",
+                      "name": "docRow1",
+                      "width": "fill_container",
+                      "fill": "#EEF3F8",
+                      "cornerRadius": 14,
+                      "gap": 12,
+                      "padding": [
+                        12,
+                        12,
+                        12,
+                        16
+                      ],
+                      "justifyContent": "space_between",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "gusZW",
+                          "name": "docRow1Text",
+                          "width": "fill_container",
+                          "layout": "vertical",
+                          "gap": 2,
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "o0uSZ",
+                              "name": "docRow1Title",
+                              "fill": "#12161D",
+                              "content": "机器学习导论 / 第 3 讲",
+                              "fontFamily": "Inter",
+                              "fontSize": 14,
+                              "fontWeight": "600"
+                            },
+                            {
+                              "type": "text",
+                              "id": "rk1XM",
+                              "name": "docRow1Meta",
+                              "fill": "#677280",
+                              "content": "已解析 · 12 个来源片段",
+                              "fontFamily": "Inter",
+                              "fontSize": 12,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "VWyNO",
+                          "name": "docRow1Status",
+                          "fill": "#E7EFE9",
+                          "cornerRadius": 999,
+                          "padding": [
+                            6,
+                            10
+                          ],
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "x4ctc",
+                              "name": "docRow1StatusText",
+                              "fill": "#3F6353",
+                              "content": "进行中",
+                              "fontFamily": "Inter",
+                              "fontSize": 11,
+                              "fontWeight": "600"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "WOjCL",
+                      "name": "docRow2",
+                      "width": "fill_container",
+                      "fill": "#FFFFFF",
+                      "cornerRadius": 14,
+                      "stroke": {
+                        "thickness": 1,
+                        "fill": "#D8E0E9"
+                      },
+                      "gap": 12,
+                      "padding": [
+                        12,
+                        12,
+                        12,
+                        16
+                      ],
+                      "justifyContent": "space_between",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "lcKT8",
+                          "name": "docRow2Text",
+                          "width": "fill_container",
+                          "layout": "vertical",
+                          "gap": 2,
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "hLv8c",
+                              "name": "docRow2Title",
+                              "fill": "#12161D",
+                              "content": "神经网络基础 / 第 1 讲",
+                              "fontFamily": "Inter",
+                              "fontSize": 14,
+                              "fontWeight": "600"
+                            },
+                            {
+                              "type": "text",
+                              "id": "mYIFF",
+                              "name": "docRow2Meta",
+                              "fill": "#8D98A6",
+                              "content": "草稿工作台",
+                              "fontFamily": "Inter",
+                              "fontSize": 12,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "i4cY2",
+                          "name": "docRow2Status",
+                          "fill": "#F3F6F9",
+                          "cornerRadius": 999,
+                          "padding": [
+                            6,
+                            10
+                          ],
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "bI69G",
+                              "name": "docRow2StatusText",
+                              "fill": "#677280",
+                              "content": "待打开",
+                              "fontFamily": "Inter",
+                              "fontSize": 11,
+                              "fontWeight": "600"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "nMbkz",
+                  "name": "sourceStack",
+                  "width": "fill_container",
+                  "height": "fill_container",
+                  "layout": "vertical",
+                  "gap": 8,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "jklOc",
+                      "name": "sourceTitle",
+                      "fill": "#677280",
+                      "content": "来源片段",
+                      "fontFamily": "Inter",
+                      "fontSize": 12,
+                      "fontWeight": "600"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "auKbP",
+                      "name": "sourceCard1",
+                      "width": "fill_container",
+                      "fill": "#F8F4EF",
+                      "cornerRadius": 16,
+                      "stroke": {
+                        "thickness": 1,
+                        "fill": "#E7DACC"
+                      },
+                      "gap": 12,
+                      "padding": [
+                        14,
+                        14,
+                        14,
+                        16
+                      ],
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "FmE3Q",
+                          "name": "sourceIndex1",
+                          "width": 34,
+                          "height": 34,
+                          "fill": "#FFFFFF",
+                          "cornerRadius": 10,
+                          "stroke": {
+                            "thickness": 1,
+                            "fill": "#D8E0E9"
+                          },
+                          "layout": "vertical",
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "MMpcq",
+                              "name": "sourceIndexText1",
+                              "fill": "#2F475D",
+                              "content": "01",
+                              "fontFamily": "Inter",
+                              "fontSize": 12,
+                              "fontWeight": "700"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "SPFJs",
+                          "name": "sourceBody1",
+                          "width": "fill_container",
+                          "layout": "vertical",
+                          "gap": 6,
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "GHQZ6",
+                              "name": "sourceHead1",
+                              "fill": "#12161D",
+                              "content": "第 3 张幻灯片 · 监督学习概念",
+                              "fontFamily": "Inter",
+                              "fontSize": 12,
+                              "fontWeight": "600"
+                            },
+                            {
+                              "type": "text",
+                              "id": "fmP0R",
+                              "name": "sourceDesc1",
+                              "fill": "#677280",
+                              "textGrowth": "fixed-width",
+                              "width": "fill_container",
+                              "content": "这一页介绍监督学习依赖带标签数据，并指出分类与回归是最典型的任务类型。",
+                              "lineHeight": 1.5,
+                              "fontFamily": "Inter",
+                              "fontSize": 12,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "o6S6F",
+                      "name": "sourceCard2",
+                      "width": "fill_container",
+                      "fill": "#FFFFFF",
+                      "cornerRadius": 16,
+                      "stroke": {
+                        "thickness": 1,
+                        "fill": "#D8E0E9"
+                      },
+                      "gap": 12,
+                      "padding": [
+                        14,
+                        14,
+                        14,
+                        16
+                      ],
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "BpIpC",
+                          "name": "sourceIndex2",
+                          "width": 34,
+                          "height": 34,
+                          "fill": "#FFFFFF",
+                          "cornerRadius": 10,
+                          "stroke": {
+                            "thickness": 1,
+                            "fill": "#D8E0E9"
+                          },
+                          "layout": "vertical",
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "ltD8I",
+                              "name": "sourceIndexText2",
+                              "fill": "#2F475D",
+                              "content": "02",
+                              "fontFamily": "Inter",
+                              "fontSize": 12,
+                              "fontWeight": "700"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "vJRBk",
+                          "name": "sourceBody2",
+                          "width": "fill_container",
+                          "layout": "vertical",
+                          "gap": 6,
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "aICst",
+                              "name": "sourceHead2",
+                              "fill": "#12161D",
+                              "content": "第 8 张幻灯片 · 分类与回归对比",
+                              "fontFamily": "Inter",
+                              "fontSize": 12,
+                              "fontWeight": "600"
+                            },
+                            {
+                              "type": "text",
+                              "id": "VAbcP",
+                              "name": "sourceDesc2",
+                              "fill": "#677280",
+                              "textGrowth": "fixed-width",
+                              "width": "fill_container",
+                              "content": "这一页进一步区分两类监督学习任务的输出形式，并给出常见应用场景。",
+                              "lineHeight": 1.5,
+                              "fontFamily": "Inter",
+                              "fontSize": 12,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "yDNAV",
+              "name": "Chat Stage",
+              "width": "fill_container",
+              "height": "fill_container",
+              "fill": "#FFFFFF",
+              "cornerRadius": 24,
+              "stroke": {
+                "thickness": 1,
+                "fill": "#D7DEE7"
+              },
+              "layout": "vertical",
+              "padding": 18,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "Zm0DF",
+                  "name": "chatHeader",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 14,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "np6Sv",
+                      "name": "chatHeading",
+                      "width": "fill_container",
+                      "justifyContent": "space_between",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "aCX6T",
+                          "name": "chatHeadingCopy",
+                          "layout": "vertical",
+                          "gap": 4,
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "NJdms",
+                              "name": "chatLabel",
+                              "fill": "#8D98A6",
+                              "content": "研究对话区",
+                              "fontFamily": "Inter",
+                              "fontSize": 11,
+                              "fontWeight": "600",
+                              "letterSpacing": 1.2
+                            },
+                            {
+                              "type": "text",
+                              "id": "fDRge",
+                              "name": "chatTitle",
+                              "fill": "#12161D",
+                              "content": "问题驱动学习",
+                              "fontFamily": "Inter",
+                              "fontSize": 28,
+                              "fontWeight": "700"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "vbPtb",
+                          "name": "scopeWrap",
+                          "gap": 8,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "w7xVN",
+                              "name": "scope1",
+                              "fill": "#2F475D",
+                              "cornerRadius": 999,
+                              "padding": [
+                                8,
+                                12
+                              ],
+                              "justifyContent": "center",
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "JCmbx",
+                                  "name": "scope1Text",
+                                  "fill": "#FFFFFF",
+                                  "content": "原始课件",
+                                  "fontFamily": "Inter",
+                                  "fontSize": 12,
+                                  "fontWeight": "600"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "Vpg0a",
+                              "name": "scope2",
+                              "fill": "#F3F6F9",
+                              "cornerRadius": 999,
+                              "stroke": {
+                                "thickness": 1,
+                                "fill": "#D8E0E9"
+                              },
+                              "padding": [
+                                8,
+                                12
+                              ],
+                              "justifyContent": "center",
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "88bsz",
+                                  "name": "scope2Text",
+                                  "fill": "#677280",
+                                  "content": "生成笔记",
+                                  "fontFamily": "Inter",
+                                  "fontSize": 12,
+                                  "fontWeight": "600"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "BUQtk",
+                              "name": "scope3",
+                              "fill": "#F3F6F9",
+                              "cornerRadius": 999,
+                              "stroke": {
+                                "thickness": 1,
+                                "fill": "#D8E0E9"
+                              },
+                              "padding": [
+                                8,
+                                12
+                              ],
+                              "justifyContent": "center",
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "SuW7U",
+                                  "name": "scope3Text",
+                                  "fill": "#677280",
+                                  "content": "全部内容",
+                                  "fontFamily": "Inter",
+                                  "fontSize": 12,
+                                  "fontWeight": "600"
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "hMyrc",
+                      "name": "focusStrip",
+                      "width": "fill_container",
+                      "fill": "#EEF3F8",
+                      "cornerRadius": 16,
+                      "stroke": {
+                        "thickness": 1,
+                        "fill": "#D8E0E9"
+                      },
+                      "gap": 16,
+                      "padding": [
+                        14,
+                        16
+                      ],
+                      "justifyContent": "space_between",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "rorYY",
+                          "name": "focusCopy",
+                          "width": "fill_container",
+                          "layout": "vertical",
+                          "gap": 4,
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "wKwBu",
+                              "name": "focusTitle",
+                              "fill": "#12161D",
+                              "content": "当前来源：第 3 张幻灯片 · 监督学习概念",
+                              "fontFamily": "Inter",
+                              "fontSize": 13,
+                              "fontWeight": "600"
+                            },
+                            {
+                              "type": "text",
+                              "id": "yhujo",
+                              "name": "focusDesc",
+                              "fill": "#677280",
+                              "textGrowth": "fixed-width",
+                              "width": "fill_container",
+                              "content": "聚焦这一页，直接围绕概念、定义和例子继续追问。",
+                              "lineHeight": 1.5,
+                              "fontFamily": "Inter",
+                              "fontSize": 12,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "xHUPZ",
+                          "name": "focusBtn",
+                          "fill": "#FFFFFF",
+                          "cornerRadius": 999,
+                          "stroke": {
+                            "thickness": 1,
+                            "fill": "#D8E0E9"
+                          },
+                          "padding": [
+                            8,
+                            12
+                          ],
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "DzU1n",
+                              "name": "focusBtnText",
+                              "fill": "#2F475D",
+                              "content": "继续追问",
+                              "fontFamily": "Inter",
+                              "fontSize": 12,
+                              "fontWeight": "600"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "Bcz9z",
+                      "name": "promptRow",
+                      "width": "fill_container",
+                      "gap": 8,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "xBvRG",
+                          "name": "prompt1",
+                          "fill": "#FFFFFF",
+                          "cornerRadius": 999,
+                          "stroke": {
+                            "thickness": 1,
+                            "fill": "#D8E0E9"
+                          },
+                          "padding": [
+                            8,
+                            12
+                          ],
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "g2eYB",
+                              "name": "prompt1Text",
+                              "fill": "#677280",
+                              "content": "请先总结这份课件",
+                              "fontFamily": "Inter",
+                              "fontSize": 12,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "prJZk",
+                          "name": "prompt2",
+                          "fill": "#FFFFFF",
+                          "cornerRadius": 999,
+                          "stroke": {
+                            "thickness": 1,
+                            "fill": "#D8E0E9"
+                          },
+                          "padding": [
+                            8,
+                            12
+                          ],
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "Ahybw",
+                              "name": "prompt2Text",
+                              "fill": "#677280",
+                              "content": "请生成 3 个复习问题",
+                              "fontFamily": "Inter",
+                              "fontSize": 12,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "lNgh8",
+                  "name": "chatHistory",
+                  "width": "fill_container",
+                  "height": "fill_container",
+                  "layout": "vertical",
+                  "gap": 12,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "ajnz8",
+                      "name": "systemCard",
+                      "width": "fill_container",
+                      "fill": "#EEF3F8",
+                      "cornerRadius": 18,
+                      "stroke": {
+                        "thickness": 1,
+                        "fill": "#D8E0E9"
+                      },
+                      "layout": "vertical",
+                      "gap": 8,
+                      "padding": [
+                        16,
+                        18
+                      ],
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "yLMCl",
+                          "name": "systemLabel",
+                          "fill": "#8D98A6",
+                          "content": "系统提示",
+                          "fontFamily": "Inter",
+                          "fontSize": 11,
+                          "fontWeight": "600",
+                          "letterSpacing": 1.2
+                        },
+                        {
+                          "type": "text",
+                          "id": "S6wiX",
+                          "name": "systemText",
+                          "fill": "#2F475D",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "已完成解析。你可以先提问，再回到来源片段或学习任务台继续推进理解。",
+                          "lineHeight": 1.6,
+                          "fontFamily": "Inter",
+                          "fontSize": 13,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "WyMId",
+                      "name": "userCard",
+                      "width": "fill_container",
+                      "fill": "#F4F6F9",
+                      "cornerRadius": 18,
+                      "stroke": {
+                        "thickness": 1,
+                        "fill": "#D8E0E9"
+                      },
+                      "layout": "vertical",
+                      "gap": 8,
+                      "padding": [
+                        16,
+                        18
+                      ],
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "u7oMH",
+                          "name": "userLabel",
+                          "fill": "#8D98A6",
+                          "content": "提问",
+                          "fontFamily": "Inter",
+                          "fontSize": 11,
+                          "fontWeight": "600",
+                          "letterSpacing": 1.2
+                        },
+                        {
+                          "type": "text",
+                          "id": "MqgA6",
+                          "name": "userText",
+                          "fill": "#12161D",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "这一讲里最先应该掌握哪些概念？",
+                          "lineHeight": 1.5,
+                          "fontFamily": "Inter",
+                          "fontSize": 14,
+                          "fontWeight": "600"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "bkimI",
+                      "name": "answerCard",
+                      "width": "fill_container",
+                      "fill": "#FFFFFF",
+                      "cornerRadius": 18,
+                      "stroke": {
+                        "thickness": 1,
+                        "fill": "#D8E0E9"
+                      },
+                      "layout": "vertical",
+                      "gap": 10,
+                      "padding": [
+                        16,
+                        18
+                      ],
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "G1OeE",
+                          "name": "answerLabel",
+                          "fill": "#8D98A6",
+                          "content": "回答 · 全部内容",
+                          "fontFamily": "Inter",
+                          "fontSize": 11,
+                          "fontWeight": "600",
+                          "letterSpacing": 1.2
+                        },
+                        {
+                          "type": "text",
+                          "id": "luwRo",
+                          "name": "answerText",
+                          "fill": "#12161D",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "你应该先建立监督学习的整体概念，再区分分类与回归这两类任务。理解“带标签数据”“输入输出映射关系”和“任务类型差异”之后，后面的模型学习方法才更容易进入。",
+                          "lineHeight": 1.65,
+                          "fontFamily": "Inter",
+                          "fontSize": 14,
+                          "fontWeight": "normal"
+                        },
+                        {
+                          "type": "frame",
+                          "id": "Ebf5F",
+                          "name": "citeRow",
+                          "width": "fill_container",
+                          "gap": 8,
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "yn6bs",
+                              "name": "cite1",
+                              "fill": "#F8F4EF",
+                              "cornerRadius": 999,
+                              "stroke": {
+                                "thickness": 1,
+                                "fill": "#E7DACC"
+                              },
+                              "padding": [
+                                6,
+                                10
+                              ],
+                              "justifyContent": "center",
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "uo79p",
+                                  "name": "cite1Text",
+                                  "fill": "#8B7058",
+                                  "content": "[1] 第 3 张幻灯片",
+                                  "fontFamily": "Inter",
+                                  "fontSize": 11,
+                                  "fontWeight": "600"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "lsoI7",
+                              "name": "cite2",
+                              "fill": "#F8F4EF",
+                              "cornerRadius": 999,
+                              "stroke": {
+                                "thickness": 1,
+                                "fill": "#E7DACC"
+                              },
+                              "padding": [
+                                6,
+                                10
+                              ],
+                              "justifyContent": "center",
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "7PbDW",
+                                  "name": "cite2Text",
+                                  "fill": "#8B7058",
+                                  "content": "[2] 第 8 张幻灯片",
+                                  "fontFamily": "Inter",
+                                  "fontSize": 11,
+                                  "fontWeight": "600"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "My0EN",
+                          "name": "supplement",
+                          "width": "fill_container",
+                          "fill": "#FBF8F3",
+                          "cornerRadius": 14,
+                          "stroke": {
+                            "thickness": 1,
+                            "fill": "#E7DACC"
+                          },
+                          "layout": "vertical",
+                          "gap": 6,
+                          "padding": [
+                            12,
+                            14
+                          ],
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "c02CJ",
+                              "name": "supplementTitle",
+                              "fill": "#8B7058",
+                              "content": "补充说明",
+                              "fontFamily": "Inter",
+                              "fontSize": 12,
+                              "fontWeight": "600"
+                            },
+                            {
+                              "type": "text",
+                              "id": "CVJK7",
+                              "name": "supplementText",
+                              "fill": "#677280",
+                              "textGrowth": "fixed-width",
+                              "width": "fill_container",
+                              "content": "如果你已经理解监督学习的大框架，下一步就应该结合例题去判断一个问题属于分类还是回归。",
+                              "lineHeight": 1.5,
+                              "fontFamily": "Inter",
+                              "fontSize": 12,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "hEBW9",
+                  "name": "composer",
+                  "width": "fill_container",
+                  "fill": "#F8FAFC",
+                  "cornerRadius": 18,
+                  "stroke": {
+                    "thickness": 1,
+                    "fill": "#D8E0E9"
+                  },
+                  "gap": 12,
+                  "padding": 16,
+                  "alignItems": "end",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "Pwsuz",
+                      "name": "composerBox",
+                      "width": "fill_container",
+                      "height": 112,
+                      "fill": "#FFFFFF",
+                      "cornerRadius": 16,
+                      "stroke": {
+                        "thickness": 1,
+                        "fill": "#D8E0E9"
+                      },
+                      "layout": "vertical",
+                      "gap": 8,
+                      "padding": [
+                        14,
+                        16
+                      ],
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "ffKZm",
+                          "name": "composerPrompt",
+                          "fill": "#677280",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "围绕课件继续提问，例如：这一部分和上一章之间的逻辑关系是什么？",
+                          "lineHeight": 1.55,
+                          "fontFamily": "Inter",
+                          "fontSize": 13,
+                          "fontWeight": "normal"
+                        },
+                        {
+                          "type": "text",
+                          "id": "JIoZs",
+                          "name": "composerHint",
+                          "fill": "#8D98A6",
+                          "content": "当前综合原始课件与生成笔记回答",
+                          "fontFamily": "Inter",
+                          "fontSize": 11,
+                          "fontWeight": "600",
+                          "letterSpacing": 1.1
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "7I2gL",
+                      "name": "sendBtn",
+                      "fill": "#2F475D",
+                      "cornerRadius": 999,
+                      "padding": [
+                        12,
+                        18
+                      ],
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "6RkSj",
+                          "name": "sendText",
+                          "fill": "#FFFFFF",
+                          "content": "发送问题",
+                          "fontFamily": "Inter",
+                          "fontSize": 13,
+                          "fontWeight": "600"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "ili4o",
+              "name": "Learning Board",
+              "width": 340,
+              "height": "fill_container",
+              "fill": "#FAFBFC",
+              "cornerRadius": 24,
+              "stroke": {
+                "thickness": 1,
+                "fill": "#D7DEE7"
+              },
+              "layout": "vertical",
+              "gap": 14,
+              "padding": 18,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "krZ7o",
+                  "name": "boardTop",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 12,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "N9cgq",
+                      "name": "boardLabel",
+                      "fill": "#8D98A6",
+                      "content": "学习任务台",
+                      "fontFamily": "Inter",
+                      "fontSize": 11,
+                      "fontWeight": "600",
+                      "letterSpacing": 1.2
+                    },
+                    {
+                      "type": "text",
+                      "id": "YQQt3",
+                      "name": "boardTitle",
+                      "fill": "#12161D",
+                      "content": "Learning Board",
+                      "fontFamily": "Inter",
+                      "fontSize": 24,
+                      "fontWeight": "700"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "2aLkl",
+                      "name": "progressRow",
+                      "width": "fill_container",
+                      "justifyContent": "space_between",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "ZcivR",
+                          "name": "progressLeft",
+                          "fill": "#677280",
+                          "content": "完成进度",
+                          "fontFamily": "Inter",
+                          "fontSize": 12,
+                          "fontWeight": "600"
+                        },
+                        {
+                          "type": "text",
+                          "id": "gHym6",
+                          "name": "progressRight",
+                          "fill": "#2F475D",
+                          "content": "3 / 8",
+                          "fontFamily": "Inter",
+                          "fontSize": 13,
+                          "fontWeight": "700"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "zszc5",
+                      "name": "progressTrack",
+                      "clip": true,
+                      "width": "fill_container",
+                      "height": 6,
+                      "fill": "#E6EBF0",
+                      "cornerRadius": 999,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "AfFU8",
+                          "name": "progressFill",
+                          "width": 126,
+                          "height": "fill_container",
+                          "fill": "#2F475D",
+                          "cornerRadius": 999
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "r98mb",
+                  "name": "summaryCard",
+                  "width": "fill_container",
+                  "fill": "#FFFFFF",
+                  "cornerRadius": 18,
+                  "stroke": {
+                    "thickness": 1,
+                    "fill": "#D8E0E9"
+                  },
+                  "layout": "vertical",
+                  "gap": 8,
+                  "padding": 16,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "GFn6j",
+                      "name": "summaryHead",
+                      "fill": "#8D98A6",
+                      "content": "摘要 / 先建立总览心智图",
+                      "fontFamily": "Inter",
+                      "fontSize": 12,
+                      "fontWeight": "600"
+                    },
+                    {
+                      "type": "text",
+                      "id": "5nJ0k",
+                      "name": "summaryText",
+                      "fill": "#12161D",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "先理解监督学习定义，再区分分类与回归。",
+                      "fontFamily": "Inter",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "8WsMl",
+                  "name": "conceptCard",
+                  "width": "fill_container",
+                  "fill": "#FFFFFF",
+                  "cornerRadius": 18,
+                  "stroke": {
+                    "thickness": 1,
+                    "fill": "#D8E0E9"
+                  },
+                  "gap": 12,
+                  "padding": 14,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "yNRFL",
+                      "name": "conceptCheck",
+                      "width": 28,
+                      "height": 28,
+                      "fill": "#2F475D",
+                      "cornerRadius": 999,
+                      "layout": "vertical",
+                      "justifyContent": "center",
+                      "alignItems": "center"
+                    },
+                    {
+                      "type": "text",
+                      "id": "gZ58T",
+                      "name": "conceptBody",
+                      "fill": "#12161D",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "概念 / 带标签数据。先明确监督学习为什么依赖标签，以及它怎样建立输入到输出的映射。",
+                      "fontFamily": "Inter",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "RLmgT",
+                  "name": "practiceCard",
+                  "width": "fill_container",
+                  "fill": "#FFFFFF",
+                  "cornerRadius": 18,
+                  "stroke": {
+                    "thickness": 1,
+                    "fill": "#D8E0E9"
+                  },
+                  "gap": 12,
+                  "padding": 14,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "ZBbGS",
+                      "name": "practiceCheck",
+                      "width": 28,
+                      "height": 28,
+                      "fill": "#FFFFFF",
+                      "cornerRadius": 999,
+                      "stroke": {
+                        "thickness": 1,
+                        "fill": "#D8E0E9"
+                      },
+                      "layout": "vertical",
+                      "justifyContent": "center",
+                      "alignItems": "center"
+                    },
+                    {
+                      "type": "text",
+                      "id": "Gm2wH",
+                      "name": "practiceBody",
+                      "fill": "#12161D",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "练习 / 判断一个案例属于分类还是回归。先独立作答，再回到对话区请求解题思路。",
+                      "fontFamily": "Inter",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "AvDm9",
+                  "name": "reviewCard",
+                  "width": "fill_container",
+                  "fill": "#F8F4EF",
+                  "cornerRadius": 18,
+                  "stroke": {
+                    "thickness": 1,
+                    "fill": "#E7DACC"
+                  },
+                  "gap": 12,
+                  "padding": 14,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "MhBHC",
+                      "name": "reviewCheck",
+                      "width": 28,
+                      "height": 28,
+                      "fill": "#FFFFFF",
+                      "cornerRadius": 999,
+                      "stroke": {
+                        "thickness": 1,
+                        "fill": "#E7DACC"
+                      },
+                      "layout": "vertical",
+                      "justifyContent": "center",
+                      "alignItems": "center"
+                    },
+                    {
+                      "type": "text",
+                      "id": "4BbLx",
+                      "name": "reviewBody",
+                      "fill": "#12161D",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "复习路径 / 总览摘要 → 核心概念 → 练习题 → 回到来源片段。",
+                      "fontFamily": "Inter",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "LpNm6",
+                  "name": "exportCard",
+                  "width": "fill_container",
+                  "fill": "#FBFAF7",
+                  "cornerRadius": 18,
+                  "stroke": {
+                    "thickness": 1,
+                    "fill": "#E7DACC"
+                  },
+                  "layout": "vertical",
+                  "gap": 8,
+                  "padding": 16,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "9StFg",
+                      "name": "exportTitle",
+                      "fill": "#8B7058",
+                      "content": "导出 / Markdown 仍保留为次级能力",
+                      "fontFamily": "Inter",
+                      "fontSize": 12,
+                      "fontWeight": "600"
+                    },
+                    {
+                      "type": "text",
+                      "id": "n7NDa",
+                      "name": "exportDesc",
+                      "fill": "#677280",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "学习优先，导出退后。需要时再下载工作笔记，不让导出打断主要学习流程。",
+                      "fontFamily": "Inter",
+                      "fontSize": 12,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "mM9hc",
+                      "name": "exportBtn",
+                      "fill": "#FFFFFF",
+                      "cornerRadius": 999,
+                      "stroke": {
+                        "thickness": 1,
+                        "fill": "#D8E0E9"
+                      },
+                      "padding": [
+                        10,
+                        16
+                      ],
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "3XQHT",
+                          "name": "exportBtnText",
+                          "fill": "#2F475D",
+                          "content": "下载 Markdown",
+                          "fontFamily": "Inter",
+                          "fontSize": 12,
+                          "fontWeight": "600"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "Z2wV6",
+      "x": 1560,
+      "y": 0,
+      "name": "Learning Research Desk / Mobile",
+      "width": 420,
+      "height": 920,
+      "fill": "#F4F6F9",
+      "layout": "vertical",
+      "gap": 16,
+      "padding": [
+        16,
+        16,
+        18,
+        16
+      ],
+      "children": [
+        {
+          "type": "frame",
+          "id": "geVIX",
+          "name": "Mobile Top",
+          "width": "fill_container",
+          "fill": "#FBFCFD",
+          "cornerRadius": 22,
+          "stroke": {
+            "thickness": 1,
+            "fill": "#D7DEE7"
+          },
+          "layout": "vertical",
+          "gap": 12,
+          "padding": [
+            18,
+            18,
+            20,
+            18
+          ],
+          "children": [
+            {
+              "type": "frame",
+              "id": "BbrW8",
+              "name": "mobileBrand",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": 4,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "23msB",
+                  "name": "mobileKicker",
+                  "fill": "#8D98A6",
+                  "content": "Courseware Research Desk",
+                  "fontFamily": "Inter",
+                  "fontSize": 11,
+                  "fontWeight": "600",
+                  "letterSpacing": 1.2
+                },
+                {
+                  "type": "text",
+                  "id": "ikfT7",
+                  "name": "mobileTitle",
+                  "fill": "#12161D",
+                  "content": "课件学习研究台",
+                  "fontFamily": "Inter",
+                  "fontSize": 26,
+                  "fontWeight": "700"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "fKLK8",
+              "name": "mobileMeta",
+              "width": "fill_container",
+              "justifyContent": "space_between",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "GoMDj",
+                  "name": "mobileDoc",
+                  "fill": "#677280",
+                  "content": "监督学习 / 当前已解析",
+                  "fontFamily": "Inter",
+                  "fontSize": 12,
+                  "fontWeight": "600"
+                },
+                {
+                  "type": "frame",
+                  "id": "X4yn0",
+                  "name": "mobileAction",
+                  "fill": "#2F475D",
+                  "cornerRadius": 999,
+                  "padding": [
+                    8,
+                    12
+                  ],
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "zmwCc",
+                      "name": "mobileActionText",
+                      "fill": "#FFFFFF",
+                      "content": "上传",
+                      "fontFamily": "Inter",
+                      "fontSize": 12,
+                      "fontWeight": "600"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "Ixe2i",
+          "name": "Mobile Body",
+          "width": "fill_container",
+          "height": "fill_container",
+          "layout": "vertical",
+          "gap": 14,
+          "children": [
+            {
+              "type": "frame",
+              "id": "rtavZ",
+              "name": "mobileQuestion",
+              "width": "fill_container",
+              "fill": "#FFFFFF",
+              "cornerRadius": 18,
+              "stroke": {
+                "thickness": 1,
+                "fill": "#D8E0E9"
+              },
+              "layout": "vertical",
+              "gap": 8,
+              "padding": 16,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "WrHAi",
+                  "name": "mobileQLabel",
+                  "fill": "#8D98A6",
+                  "content": "研究对话",
+                  "fontFamily": "Inter",
+                  "fontSize": 11,
+                  "fontWeight": "600",
+                  "letterSpacing": 1.2
+                },
+                {
+                  "type": "text",
+                  "id": "BtkCV",
+                  "name": "mobileQText",
+                  "fill": "#12161D",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "先解释监督学习的核心概念，再带我进入后面的模型方法。",
+                  "lineHeight": 1.55,
+                  "fontFamily": "Inter",
+                  "fontSize": 15,
+                  "fontWeight": "600"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "F83Jy",
+              "name": "mobileAnswer",
+              "width": "fill_container",
+              "fill": "#EEF3F8",
+              "cornerRadius": 18,
+              "stroke": {
+                "thickness": 1,
+                "fill": "#D8E0E9"
+              },
+              "layout": "vertical",
+              "gap": 8,
+              "padding": 16,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "6cJqc",
+                  "name": "mobileALabel",
+                  "fill": "#8D98A6",
+                  "content": "回答 · 全部内容",
+                  "fontFamily": "Inter",
+                  "fontSize": 11,
+                  "fontWeight": "600",
+                  "letterSpacing": 1.2
+                },
+                {
+                  "type": "text",
+                  "id": "2qf1F",
+                  "name": "mobileAText",
+                  "fill": "#12161D",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "先理解监督学习为什么依赖标签，再区分分类与回归，这是进入模型学习前最重要的两步。",
+                  "lineHeight": 1.6,
+                  "fontFamily": "Inter",
+                  "fontSize": 13,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "rXMkC",
+              "name": "mobileTask",
+              "width": "fill_container",
+              "fill": "#FFFFFF",
+              "cornerRadius": 18,
+              "stroke": {
+                "thickness": 1,
+                "fill": "#D8E0E9"
+              },
+              "layout": "vertical",
+              "gap": 8,
+              "padding": 16,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "cR0Og",
+                  "name": "mobileTaskTitle",
+                  "fill": "#8D98A6",
+                  "content": "学习任务 / 今天先完成 3 项",
+                  "fontFamily": "Inter",
+                  "fontSize": 12,
+                  "fontWeight": "600"
+                },
+                {
+                  "type": "text",
+                  "id": "kxmKc",
+                  "name": "mobileTaskText",
+                  "fill": "#12161D",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "建立总览摘要，梳理核心概念，然后完成一道分类或回归判断题。",
+                  "lineHeight": 1.7,
+                  "fontFamily": "Inter",
+                  "fontSize": 13,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "jQGZo",
+              "name": "mobileSource",
+              "width": "fill_container",
+              "fill": "#FBFAF7",
+              "cornerRadius": 18,
+              "stroke": {
+                "thickness": 1,
+                "fill": "#E7DACC"
+              },
+              "layout": "vertical",
+              "gap": 8,
+              "padding": 16,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "14RVI",
+                  "name": "mobileSourceLabel",
+                  "fill": "#8B7058",
+                  "content": "来源片段 / 第 3 张幻灯片",
+                  "fontFamily": "Inter",
+                  "fontSize": 12,
+                  "fontWeight": "600"
+                },
+                {
+                  "type": "text",
+                  "id": "VvfFv",
+                  "name": "mobileSourceText",
+                  "fill": "#677280",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "监督学习依赖带标签数据，分类与回归是最常见的两类任务。",
+                  "lineHeight": 1.55,
+                  "fontFamily": "Inter",
+                  "fontSize": 13,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "zwUqg",
+              "name": "mobileSpacer",
+              "width": "fill_container",
+              "height": "fill_container"
+            },
+            {
+              "type": "frame",
+              "id": "cGtYb",
+              "name": "mobileNav",
+              "width": "fill_container",
+              "fill": "#FBFCFD",
+              "cornerRadius": 16,
+              "stroke": {
+                "thickness": 1,
+                "fill": "#D8E0E9"
+              },
+              "padding": [
+                10,
+                14
+              ],
+              "justifyContent": "space_between",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "SGKzk",
+                  "name": "navItem1",
+                  "fill": "#8D98A6",
+                  "content": "资料",
+                  "fontFamily": "Inter",
+                  "fontSize": 11,
+                  "fontWeight": "600"
+                },
+                {
+                  "type": "text",
+                  "id": "hxZGs",
+                  "name": "navItem2",
+                  "fill": "#2F475D",
+                  "content": "对话",
+                  "fontFamily": "Inter",
+                  "fontSize": 11,
+                  "fontWeight": "700"
+                },
+                {
+                  "type": "text",
+                  "id": "rvBCh",
+                  "name": "navItem3",
+                  "fill": "#8D98A6",
+                  "content": "任务",
+                  "fontFamily": "Inter",
+                  "fontSize": 11,
+                  "fontWeight": "600"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
 }

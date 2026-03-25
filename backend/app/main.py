@@ -10,7 +10,7 @@ from fastapi.responses import FileResponse
 from .config import get_settings
 from .database import init_database
 from . import repository
-from .schemas import ChatAnswer, ChatRequest, MarkdownPreview, UploadResponse
+from .schemas import AssessmentSuite, ChatAnswer, ChatRequest, MarkdownPreview, UploadResponse
 from .services.ai_client import AIConfigurationError, QwenClient
 from .services.parsers import UnsupportedDocumentError
 from .services.pipeline import process_saved_document
@@ -118,13 +118,13 @@ def chat_with_document(document_id: str, payload: ChatRequest):
     if detail.status != "ready":
         raise HTTPException(status_code=400, detail="文档尚未处理完成，暂时无法问答。")
 
-    records = _build_retrieval_records(detail, payload.scope)
+    records = _build_retrieval_records(detail, "all")
     hits = rank_fragments(payload.question, records, limit=settings.retrieval_limit)
     if not hits:
         fallback_answer = "当前没有检索到足够的课件内容，请换一种问法，或先查看生成的章节讲解。"
         chat_id = repository.save_chat_message(
             document_id,
-            scope=payload.scope,
+            scope="all",
             question=payload.question,
             answer=fallback_answer,
             source_refs=[],
@@ -134,11 +134,6 @@ def chat_with_document(document_id: str, payload: ChatRequest):
         recent = repository.get_recent_chats(document_id, limit=1)[0]
         return ChatAnswer(id=chat_id, **recent.model_dump(exclude={"id"}))
 
-    scope_label = {
-        "raw": "原始课件",
-        "notes": "生成笔记",
-        "all": "全部内容",
-    }[payload.scope]
     recent_history = [
         f"Q: {chat.question}\nA: {chat.answer}"
         for chat in repository.get_recent_chats(document_id, limit=3)
@@ -146,13 +141,13 @@ def chat_with_document(document_id: str, payload: ChatRequest):
     answer = QwenClient().answer_question(
         document_title=detail.title,
         question=payload.question,
-        scope_label=scope_label,
+        scope_label="课件与学习笔记",
         context_blocks=build_context_blocks(hits),
         recent_history=recent_history,
     )
     chat_id = repository.save_chat_message(
         document_id,
-        scope=payload.scope,
+        scope="all",
         question=payload.question,
         answer=answer.answer,
         source_refs=answer.source_refs,
@@ -161,6 +156,20 @@ def chat_with_document(document_id: str, payload: ChatRequest):
     )
     latest = repository.get_recent_chats(document_id, limit=1)[0]
     return ChatAnswer(id=chat_id, **latest.model_dump(exclude={"id"}))
+
+
+@app.post("/api/documents/{document_id}/assessment", response_model=AssessmentSuite)
+def generate_assessment(document_id: str):
+    detail = repository.get_document_detail(document_id)
+    if detail is None:
+        raise HTTPException(status_code=404, detail="文档不存在。")
+    if detail.status != "ready":
+        raise HTTPException(status_code=400, detail="文档尚未处理完成，无法生成测试。")
+    return QwenClient().generate_assessment(
+        document_title=detail.title,
+        sections=detail.sections,
+        learning_board=detail.learning_board,
+    )
 
 
 async def _save_upload(document_id: str, file: UploadFile) -> Path:
@@ -197,7 +206,6 @@ def _build_retrieval_records(detail, scope: str) -> list[dict[str, str | int | N
                         [
                             section.detailed_explanation,
                             "关键知识点：" + "；".join(section.key_points),
-                            "课后自测题：" + "；".join(section.quiz),
                         ]
                     ),
                 }

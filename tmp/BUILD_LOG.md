@@ -325,3 +325,41 @@
   - 重写后再次构建：
     - 通过
     - 产物：`dist/assets/index-Dt-tmoYr.css`、`dist/assets/index-FBEKs0D-.js`
+
+## Phase 13 - 复习助手产品重构
+
+- 产品调整：
+  - 名称从“课件智能知识点提取助手”改为“课件智能知识点复习助手”
+  - 删除 UI 中的片段来源展示，仅保留课件与学习笔记摘要
+  - 研究对话区移除原始课件 / 生成笔记 / 全部内容切换，默认统一基于课件 + 学习笔记回答
+  - 学习笔记生成阶段不再直接生成自测题
+- 后端实现：
+  - `QwenClient.generate_section()` 去掉 quiz 输出
+  - 新增 `QwenClient.generate_learning_board()` 规划学习任务台
+  - 新增 `QwenClient.generate_assessment()` 生成选择题与填空题
+  - `GET /api/documents/{id}` 返回的 `learning_board` 结构升级
+  - 新增 `POST /api/documents/{id}/assessment`
+- 前端实现：
+  - 左栏改为“课件与学习笔记”
+  - 中栏改为单一干净对话区
+  - 右栏学习任务全部完成后切换到测试环境
+  - 测试环境支持：
+    - 单选题作答
+    - 填空题作答
+    - 提交后显示正确/错误
+    - 显示题目解析
+- 本阶段验证：
+  - 前端构建：
+    - 命令：`npm run build`
+    - 结果：通过
+    - 产物：`dist/assets/index-BsoGBjr0.css`、`dist/assets/index-Bb6306az.js`
+  - 后端语法检查：
+    - 命令：`conda run -n assistant python -m compileall backend`
+    - 结果：通过
+  - 端到端烟测：
+    - 命令：`conda run -n assistant python -c "import runpy, sys; sys.path.insert(0, '.'); runpy.run_path('tmp/test_smoke.py', run_name='__main__')"`
+    - 输出摘要：
+      - `sample_courseware.pptx 200 监督学习 1 1 1`
+      - `sample_courseware.pdf 200 第 1 部分 1 1 1`
+      - `chat 200 ['第 1 张幻灯片']`
+      - `assessment 200 2`

@@ -31,7 +31,7 @@ def _parse_cors_origins() -> tuple[str, ...]:
 
 @dataclass(frozen=True)
 class Settings:
-    app_name: str = "课件智能知识点提取助手"
+    app_name: str = "课件智能知识点复习助手"
     qwen_api_key: str = os.getenv("QWEN_API_KEY", "")
     qwen_base_url: str = os.getenv(
         "QWEN_BASE_URL", "https://dashscope.aliyuncs.com/compatible-mode/v1"

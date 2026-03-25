@@ -35,6 +35,7 @@ def init_database() -> None:
                 file_type TEXT NOT NULL,
                 status TEXT NOT NULL,
                 source_path TEXT NOT NULL,
+                learning_board_json TEXT,
                 markdown_path TEXT,
                 error_message TEXT,
                 created_at TEXT NOT NULL,
@@ -74,4 +75,19 @@ def init_database() -> None:
                 created_at TEXT NOT NULL
             );
             """
+        )
+        _ensure_column(connection, "documents", "learning_board_json", "TEXT")
+
+
+def _ensure_column(
+    connection: sqlite3.Connection,
+    table_name: str,
+    column_name: str,
+    column_definition: str,
+) -> None:
+    rows = connection.execute(f"PRAGMA table_info({table_name})").fetchall()
+    columns = {row["name"] for row in rows}
+    if column_name not in columns:
+        connection.execute(
+            f"ALTER TABLE {table_name} ADD COLUMN {column_name} {column_definition}"
         )

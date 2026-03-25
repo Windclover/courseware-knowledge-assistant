@@ -17,8 +17,8 @@ export function TopBar(props: TopBarProps) {
           研
         </div>
         <div className="brand-copy">
-          <p className="brand-kicker">Courseware Research Desk</p>
-          <h1>课件智能知识点提取助手</h1>
+          <p className="brand-kicker">Courseware Review Desk</p>
+          <h1>课件智能知识点复习助手</h1>
         </div>
       </div>
 
@@ -26,7 +26,7 @@ export function TopBar(props: TopBarProps) {
         <div className="document-summary-chip">
           <span className="chip-label">当前课件</span>
           <strong>{documentDetail?.title ?? "未选择课件"}</strong>
-          <small>{documentDetail?.original_filename ?? "上传后开始整理与对话"}</small>
+          <small>{documentDetail?.original_filename ?? "上传后自动生成学习笔记"}</small>
         </div>
         <div className="topbar-actions">
           <label className="action-button is-primary" htmlFor={uploadInputId}>

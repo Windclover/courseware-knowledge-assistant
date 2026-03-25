@@ -26,7 +26,6 @@ class SectionNote(BaseModel):
     title: str
     detailed_explanation: str
     key_points: list[str] = Field(default_factory=list)
-    quiz: list[str] = Field(default_factory=list)
     source_refs: list[str] = Field(default_factory=list)
 
 
@@ -85,6 +84,27 @@ class LearningBoard(BaseModel):
     concepts: list[LearningConceptItem] = Field(default_factory=list)
     practice: list[LearningPracticeItem] = Field(default_factory=list)
     review_path: list[LearningReviewStep] = Field(default_factory=list)
+
+
+class AssessmentQuestionOption(BaseModel):
+    id: str
+    text: str
+
+
+class AssessmentQuestion(BaseModel):
+    id: str
+    type: Literal["choice", "blank"]
+    prompt: str
+    options: list[AssessmentQuestionOption] = Field(default_factory=list)
+    answer: str = ""
+    acceptable_answers: list[str] = Field(default_factory=list)
+    explanation: str
+
+
+class AssessmentSuite(BaseModel):
+    title: str
+    intro: str
+    questions: list[AssessmentQuestion] = Field(default_factory=list)
 
 
 class DocumentDetail(DocumentSummary):

@@ -40,11 +40,9 @@ def build_markdown(
         f"- [{section.title}](#{_slugify(section.title)})" for section in sections
     ]
     section_blocks: list[str] = []
-    quiz_blocks: list[str] = []
 
     for section in sections:
         key_points = "\n".join(f"- {item}" for item in section.key_points)
-        quiz_list = "\n".join(f"- {item}" for item in section.quiz)
         sources = "、".join(section.source_refs)
         section_blocks.append(
             "\n".join(
@@ -61,15 +59,6 @@ def build_markdown(
                 ]
             )
         )
-        quiz_blocks.append(
-            "\n".join(
-                [
-                    f"### {section.title}",
-                    quiz_list or "- 暂无自测题",
-                    "",
-                ]
-            )
-        )
 
     return "\n".join(
         [
@@ -82,9 +71,6 @@ def build_markdown(
             "\n".join(toc_lines) or "- 暂无目录",
             "",
             *section_blocks,
-            "## 课后自测题",
-            "",
-            *quiz_blocks,
         ]
     ).strip() + "\n"
 

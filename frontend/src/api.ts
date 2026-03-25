@@ -1,4 +1,5 @@
 import type {
+  AssessmentSuite,
   ChatRecord,
   ChatScope,
   DocumentDetail,
@@ -64,6 +65,15 @@ export async function sendChatMessage(
     body: JSON.stringify({ question, scope }),
   });
   return parseResponse<ChatRecord>(response);
+}
+
+export async function generateAssessment(
+  documentId: string,
+): Promise<AssessmentSuite> {
+  const response = await fetch(`${API_BASE_URL}/api/documents/${documentId}/assessment`, {
+    method: "POST",
+  });
+  return parseResponse<AssessmentSuite>(response);
 }
 
 export function markdownDownloadUrl(documentId: string): string {
