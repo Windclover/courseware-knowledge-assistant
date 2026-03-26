@@ -363,3 +363,31 @@
       - `sample_courseware.pdf 200 第 1 部分 1 1 1`
       - `chat 200 ['第 1 张幻灯片']`
       - `assessment 200 2`
+
+## Phase 14 - 联动与体验自检
+
+- 检查项：
+  - 前端是否还有旧的范围切换或来源片段暴露
+  - 对话上下文是否只记最近一轮，还是会结合历史对话和学习笔记
+  - 测试环境是否满足“做题前无答案，交卷后显示正确/错误与解析”
+  - 上传和导出按钮是否只保留一个入口
+- 修正内容：
+  - 对话统一走 `scope=all`，不再让用户选择范围
+  - 检索上下文纳入学习任务台 overview 和更多历史对话
+  - 导出改成顶栏唯一按钮，并输出“复习记录”而非只导出 Markdown
+  - 左栏删除片段来源展示，只保留课件与学习笔记摘要
+- 本阶段验证：
+  - 前端构建：
+    - 命令：`npm run build`
+    - 结果：通过
+    - 产物：`dist/assets/index-BsoGBjr0.css`、`dist/assets/index-CledSksE.js`
+  - 后端语法检查：
+    - 命令：`conda run -n assistant python -m compileall backend`
+    - 结果：通过
+  - 端到端烟测：
+    - 命令：`conda run -n assistant python -c "import runpy, sys; sys.path.insert(0, '.'); runpy.run_path('tmp/test_smoke.py', run_name='__main__')"`
+    - 输出摘要：
+      - `sample_courseware.pptx 200 监督学习 1 1 1`
+      - `sample_courseware.pdf 200 第 1 部分 1 1 1`
+      - `chat 200 ['第 1 张幻灯片']`
+      - `assessment 200 2`

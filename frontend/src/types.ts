@@ -17,7 +17,6 @@ export interface SectionNote {
   title: string;
   detailed_explanation: string;
   key_points: string[];
-  quiz: string[];
   source_refs: string[];
 }
 

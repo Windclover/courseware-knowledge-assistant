@@ -1,7 +1,6 @@
 import type {
   AssessmentSuite,
   ChatRecord,
-  ChatScope,
   DocumentDetail,
   DocumentSummary,
   MarkdownPreview,
@@ -55,14 +54,13 @@ export async function fetchMarkdownPreview(
 export async function sendChatMessage(
   documentId: string,
   question: string,
-  scope: ChatScope,
 ): Promise<ChatRecord> {
   const response = await fetch(`${API_BASE_URL}/api/documents/${documentId}/chat`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ question, scope }),
+    body: JSON.stringify({ question, scope: "all" }),
   });
   return parseResponse<ChatRecord>(response);
 }

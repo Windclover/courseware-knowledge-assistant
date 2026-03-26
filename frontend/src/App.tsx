@@ -11,7 +11,6 @@ import {
   fetchDocuments,
   fetchMarkdownPreview,
   generateAssessment,
-  markdownDownloadUrl,
   sendChatMessage,
   uploadDocument,
 } from "./api";
@@ -169,7 +168,7 @@ function App() {
     setChatting(true);
     setErrorMessage(null);
     try {
-      const answer = await sendChatMessage(documentDetail.id, question.trim(), "all");
+      const answer = await sendChatMessage(documentDetail.id, question.trim());
       startTransition(() => {
         setDocumentDetail({
           ...documentDetail,

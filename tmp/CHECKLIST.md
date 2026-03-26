@@ -83,3 +83,9 @@
   - 验收标准：UI 中不再展示来源片段；上传后自动生成学习笔记；Learning Board 由 AI 规划；全部勾选后进入选择题/填空题测试环境；构建与烟测通过。
   - 证据：`backend/app/services/ai_client.py`；`backend/app/services/learning_board.py`；`backend/app/main.py`；`frontend/src/App.tsx`；`frontend/src/components/ChatStage.tsx`；`frontend/src/components/LearningBoard.tsx`；`frontend/src/components/SourceRail.tsx`；`frontend/src/components/TopBar.tsx`
   - 已验证：`npm run build` 成功；`conda run -n assistant python -m compileall backend` 成功；`tmp/test_smoke.py` 已验证 assessment 接口返回 `200`。
+
+- [x] Phase 14：复习助手工作流收口与联动自检
+  - 计划：检查前端是否足够美观、上下文是否合理、测试环境是否按“先做题后出答案与解析”、上传和导出是否都可用且入口唯一，并修正发现的问题。
+  - 验收标准：对话默认综合课件+学习笔记；Learning Board 与测试环境联动合理；上传和导出按钮只保留一处；构建和烟测继续通过。
+  - 证据：`frontend/src/App.tsx`；`frontend/src/components/TopBar.tsx`；`frontend/src/components/SourceRail.tsx`；`frontend/src/components/ChatStage.tsx`；`frontend/src/components/LearningBoard.tsx`；`backend/app/main.py`；`backend/app/services/ai_client.py`
+  - 已验证：`npm run build` 成功；`tmp/test_smoke.py` 输出 `assessment 200 2`；导出逻辑改为顶部统一按钮。
