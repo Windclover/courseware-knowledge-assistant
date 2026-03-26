@@ -143,7 +143,6 @@ label[for] {
 .document-card,
 .document-row,
 .status-badge,
-.task-card,
 .task-card-main,
 .progress-stat,
 .board-intro,
@@ -437,6 +436,13 @@ label[for] {
   flex: 1;
 }
 
+.board-scroll,
+.chat-history-block {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
 .document-stack,
 .note-list,
 .chat-history,
@@ -663,6 +669,11 @@ label[for] {
 .board-stack {
   display: grid;
   gap: 12px;
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  padding-right: 4px;
+  overscroll-behavior: contain;
 }
 
 .board-module,
@@ -675,6 +686,8 @@ label[for] {
 }
 
 .board-module {
+  display: grid;
+  gap: 12px;
   padding: 16px 16px 18px;
 }
 
@@ -684,8 +697,16 @@ label[for] {
   line-height: 1.25;
 }
 
+.board-module-head > div,
+.assessment-head > div {
+  min-width: 0;
+}
+
 .task-card {
-  padding: 14px;
+  display: block;
+  min-height: 148px;
+  padding: 16px;
+  border-color: #dfe6ee;
 }
 
 .task-card.is-complete {
@@ -694,16 +715,21 @@ label[for] {
 
 .task-card-main {
   width: 100%;
+  display: flex;
   align-items: flex-start;
   gap: 12px;
 }
 
 .task-check {
   flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   width: 28px;
   height: 28px;
-  margin-top: 2px;
+  margin-top: 1px;
   border: 1px solid var(--border-strong);
+  border-radius: 999px;
   background: #ffffff;
 }
 
@@ -726,23 +752,26 @@ label[for] {
 
 .task-copy {
   display: grid;
-  gap: 6px;
+  gap: 8px;
   flex: 1;
+  min-width: 0;
 }
 
 .task-copy strong {
   font-size: 0.97rem;
-  line-height: 1.4;
+  line-height: 1.45;
+  text-wrap: pretty;
 }
 
 .task-subtitle {
   font-size: 0.68rem;
+  line-height: 1.25;
 }
 
 .task-card-footer {
   display: flex;
   justify-content: flex-start;
-  margin-top: 2px;
+  margin-top: 6px;
 }
 
 .mini-text-button {
@@ -789,30 +818,55 @@ label[for] {
   gap: 12px;
 }
 
+.assessment-shell {
+  min-height: 0;
+}
+
+.assessment-list {
+  min-height: 0;
+  overflow: auto;
+  padding-right: 4px;
+  overscroll-behavior: contain;
+}
+
 .assessment-card {
-  padding: 16px;
+  display: grid;
+  gap: 12px;
+  padding: 16px 16px 18px;
+  border-color: #dfe6ee;
 }
 
 .assessment-head {
-  align-items: flex-start;
+  display: flex;
+  align-items: center;
   justify-content: space-between;
   gap: 12px;
-  margin-bottom: 10px;
+  margin-bottom: 0;
+}
+
+.assessment-prompt {
+  display: block;
+  margin: 0;
 }
 
 .assessment-options {
   display: grid;
-  gap: 10px;
-  margin-top: 12px;
+  gap: 8px;
+  margin-top: 0;
 }
 
 .option-row {
-  align-items: flex-start;
+  display: flex;
+  align-items: center;
   gap: 10px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.86);
 }
 
 .option-row input {
-  margin-top: 4px;
+  margin: 0;
 }
 
 .explanation-box {
@@ -824,6 +878,11 @@ label[for] {
 .explanation-box strong {
   color: var(--accent-strong);
   font-size: 0.9rem;
+}
+
+.explanation-box p {
+  margin: 8px 0 0;
+  line-height: 1.7;
 }
 
 .empty-card {
