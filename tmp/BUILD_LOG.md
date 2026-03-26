@@ -391,3 +391,504 @@
       - `sample_courseware.pdf 200 第 1 部分 1 1 1`
       - `chat 200 ['第 1 张幻灯片']`
       - `assessment 200 2`
+
+## Phase 15 - 样例数据污染修复
+
+- 问题确认：
+  - 首页再次出现 `sample_courseware`，不是前端缓存，而是 `tmp/test_smoke.py` 在跑烟测时直接调用真实上传接口，把样例写回了 `data/app.db`、`data/uploads/` 和 `data/outputs/`。
+- 修复内容：
+  - `backend/app/config.py`
+    - 新增 `APP_DATABASE_PATH`、`APP_UPLOAD_ROOT`、`APP_OUTPUT_ROOT` 三个环境变量覆盖能力。
+    - 用途：允许测试脚本切到独立数据目录，不再污染真实数据。
+  - `tmp/test_smoke.py`
+    - 在导入后端模块前，先设置隔离数据路径到 `tmp/smoke_runs/<随机目录>/`。
+    - 用途：每次烟测都写入自己独立的 SQLite、uploads、outputs。
+    - 生成方式：运行 `conda run -n assistant python -c "import runpy, sys; sys.path.insert(0, '.'); runpy.run_path('tmp/test_smoke.py', run_name='__main__')"`
+  - `.gitignore`
+    - 新增 `tmp/smoke_runs/`，避免隔离烟测产物被误提交。
+- 数据清理：
+  - 命令：`sqlite3 data/app.db "PRAGMA foreign_keys = ON; DELETE FROM documents;"`
+  - 结果：真实数据库中的样例文档数变为 `0`
+  - 命令：`find data/uploads -mindepth 1 ! -name '.gitkeep' -exec rm -rf {} +`
+  - 命令：`find data/outputs -mindepth 1 ! -name '.gitkeep' -exec rm -rf {} +`
+  - 结果：真实上传目录与输出目录只保留 `.gitkeep`
+- 本阶段验证：
+  - 真实 API 空状态检查：
+    - 命令：`conda run -n assistant python -c "from fastapi.testclient import TestClient; from backend.app.main import app; client=TestClient(app); print(client.get('/api/documents').json())"`
+    - 结果：烟测前返回 `[]`
+  - 前端构建：
+    - 命令：`npm run build`
+    - 结果：通过
+    - 产物：`dist/assets/index-DGZpiOVe.css`、`dist/assets/index-NlzEw-h3.js`
+  - 后端语法检查：
+    - 命令：`conda run -n assistant python -m compileall backend`
+    - 结果：通过
+  - 隔离烟测：
+    - 命令：`conda run -n assistant python -c "import runpy, sys; sys.path.insert(0, '.'); runpy.run_path('tmp/test_smoke.py', run_name='__main__')"`
+    - 输出摘要：
+      - `sample_courseware.pptx 200 监督学习 1 1 1`
+      - `sample_courseware.pdf 200 第 1 部分 1 1 1`
+      - `chat 200 ['第 1 张幻灯片']`
+      - `assessment 200 2`
+    - 产物：`tmp/smoke_runs/383a984b/`
+  - 真实 API 复检：
+    - 命令：`conda run -n assistant python -c "from fastapi.testclient import TestClient; from backend.app.main import app; client=TestClient(app); print(client.get('/api/documents').json())"`
+    - 结果：烟测后仍返回 `[]`
+
+## Phase 16 - 真实 Qwen 回答长度调优
+
+- 触发原因：
+  - 用户已配置真实百炼 API Key，并反馈“每次回复都很短”。
+- 现象验证：
+  - 新增过程脚本：`tmp/real_qwen_probe.py`
+  - 用途：在隔离数据目录下创建一份两页 PPT，真实调用当前 `qwen-turbo` 完成上传、生成笔记和两轮对话，统计回答长度。
+  - 生成方式：`PYTHONPATH=/Users/wanghaohua/Desktop/毕业实习 conda run -n assistant python /Users/wanghaohua/Desktop/毕业实习/tmp/real_qwen_probe.py`
+  - 首次真实结果：
+    - `chat1_len 204`
+    - `chat2_len 94`
+    - 结论：追问场景下回答明显偏短。
+- 修复内容：
+  - `backend/app/services/ai_client.py`
+    - 将 system prompt 从“严谨、简洁”改为“严谨、清晰、愿意适度展开解释”。
+    - 在 `answer_question()` 中加入长度和结构约束：
+      - 默认 180-320 字
+      - 碰到“为什么 / 如何 / 区别 / 原理 / 详细”尽量展开到 220-420 字
+      - 默认写成 2 段或 3 个要点，避免只回 1-2 句
+    - 为 JSON completion 增加显式 `max_tokens`，避免兼容层给出过紧的默认输出预算。
+- 本阶段验证：
+  - 后端语法检查：
+    - 命令：`conda run -n assistant python -m compileall backend`
+    - 结果：通过
+  - 真实接口回归：
+    - 命令：`PYTHONPATH=/Users/wanghaohua/Desktop/毕业实习 conda run -n assistant python /Users/wanghaohua/Desktop/毕业实习/tmp/real_qwen_probe.py`
+    - 回归结果：
+      - `chat1_len 254`
+      - `chat2_len 234`
+    - 结论：真实问答明显变长，第二轮追问不再是 1-2 句短答。
+
+## Phase 17 - 数学课件笔记与计算题增强
+
+- 触发原因：
+  - 用户用真实 `罚函数法.pdf` 验证后，指出三类问题：
+    - Markdown 过短、几乎全是文字，没有公式和像样的笔记结构
+    - 导出的 Markdown 没有完整测试题、答案和解析
+    - 题目全是概念题，没有计算题
+- 根因确认：
+  - 真实课件检查显示 PDF 文本层里其实有公式、算法步骤和例题，但原始 PDF 标题检测把整份 `24` 页课件聚成了 `1` 个 section。
+  - 原始 Markdown 仅有“详细讲解 + 关键知识点”，没有“公式 / 例题 / 步骤”结构。
+  - assessment prompt 固定为 `3 选择 + 2 填空`。
+- 后端改动：
+  - `backend/app/schemas.py`
+    - 新增 `FormulaNote`、`WorkedExample`
+    - `SectionNote` 增加 `formula_notes`、`worked_examples`
+    - `AssessmentQuestion.type` 扩展为 `choice | blank | calculation`
+    - `AssessmentQuestion` 新增 `display_answer`、`solution_steps`
+  - `backend/app/domain.py`
+    - `SectionDraft` 增加 `formula_candidates`、`example_candidates`
+    - `GeneratedSection` 增加 `formula_notes`、`worked_examples`
+  - `backend/app/database.py`
+    - `sections` 表新增 `formula_notes_json`、`worked_examples_json`
+    - 用 `_ensure_column` 做兼容补列
+  - `backend/app/repository.py`
+    - 保存和读取章节时同步持久化公式与例题
+  - `backend/app/services/parsers.py`
+    - PDF 解析改为：
+      - 先按页提取行文本
+      - 做重复页眉/页脚噪声识别
+      - 跳过目录页/封面页
+      - 改成在前若干行中找“最后一个真正的短标题”
+    - 放宽了过短页面过滤，修复极简文本 PDF 被误判为空文档的问题
+  - `backend/app/services/section_builder.py`
+    - 章节构建时同步抽取公式候选和例题候选
+  - `backend/app/services/ai_client.py`
+    - `generate_section()` 改成数学课件风格 prompt，要求输出详细讲解、公式说明和例题步骤
+    - `generate_assessment()` 改成“有公式/例题时必须出计算题”
+    - 新增计算题 fallback，确保模型没配合时也会补出 calculation 题
+    - 聊天检索和章节生成中更严格约束 `source_refs`
+  - `backend/app/main.py`
+    - 聊天检索上下文中补入章节公式与例题步骤
+  - `backend/app/services/markdown_writer.py`
+    - Markdown 结构升级为：
+      - 章节概述
+      - 详细讲解
+      - 关键知识点
+      - 核心公式
+      - 例题与计算步骤
+- 前端改动：
+  - `frontend/src/types.ts`
+    - 同步新增公式/例题类型与 calculation 题型字段
+  - `frontend/src/components/LearningBoard.tsx`
+    - 测试区支持 calculation
+    - 交卷后显示标准答案和参考步骤
+  - `frontend/src/App.tsx`
+    - 导出复习记录时，补全测试题型、用户答案、正确答案、解析、参考步骤和得分
+    - 未交卷时导出会明确写“测试已生成但尚未交卷”
+  - `frontend/src/styles.css`
+    - 补充计算题步骤的基础排版样式
+- 过程脚本：
+  - 新增 `tmp/penalty_pdf_probe.py`
+  - 用途：隔离目录下真实上传 `罚函数法.pdf`，打印 section 数、公式数、例题数、Markdown 长度和题型分布
+  - 新增 `.gitignore` 条目：
+    - `tmp/pdf_probe/`
+    - `tmp/penalty_pdf_runs/`
+    - `tmp/smoke_debug/`
+- 本阶段验证：
+  - 前端构建：
+    - 命令：`npm run build`
+    - 结果：通过
+  - 后端语法检查：
+    - 命令：`conda run -n assistant python -m compileall backend`
+    - 结果：通过
+  - 极简烟测：
+    - 命令：`conda run -n assistant python -c "import runpy, sys; sys.path.insert(0, '.'); runpy.run_path('tmp/test_smoke.py', run_name='__main__')"`
+    - 输出摘要：
+      - `sample_courseware.pptx 200 监督学习 1 1 1`
+      - `sample_courseware.pdf 200 第 1 部分 1 1 1`
+      - `chat 200 ['第 1 张幻灯片']`
+      - `assessment 200 2`
+  - 真实 `罚函数法.pdf` 回归：
+    - 命令：`PYTHONPATH=/Users/wanghaohua/Desktop/毕业实习 conda run -n assistant python /Users/wanghaohua/Desktop/毕业实习/tmp/penalty_pdf_probe.py`
+    - 关键结果：
+      - `sections 11`
+      - `markdown_len 11025`
+      - assessment 含 `2` 道 `calculation` 题
+    - 说明：主问题已解决，笔记已包含公式与例题，测试不再全部是概念题。
+
+## Phase 18 - 研究对话区质量修复
+
+- 触发原因：
+  - 用户贴出真实对话，指出研究对话区质量差，主要表现为：
+    - 经常退化成整份课件的泛化总结
+    - `11`、`123` 这种输入也会被硬答
+    - “用数学公式讲一下”虽然回答了，但公式经常被 JSON 转义破坏
+    - “帮我出个练习题”后再追问“怎么解决”，不能稳定承接上一题
+- 根因确认：
+  - 聊天前没有问题类型识别，所有问题都走同一套检索和 prompt。
+  - 检索只按粗粒度章节文本匹配，缺少单独的“公式 / 例题 / 章节总览”记录。
+  - summary / mastery / concepts 这类全局问题也走局部命中检索，容易被某一页带偏。
+  - Qwen 在 JSON 字符串里输出 `\frac`、`\text` 时会被 JSON 解释为控制字符，导致公式乱码甚至 JSON 解析失败。
+- 后端改动：
+  - `backend/app/main.py`
+    - 增加问题类型识别：
+      - `summary`
+      - `mastery`
+      - `concepts`
+      - `formula`
+      - `exercise`
+      - `follow_up`
+      - `clarify`
+    - 对低信息输入（如纯数字）直接返回澄清，不再胡答。
+    - 对 `summary / mastery / concepts` 改成走全局上下文块，而不是局部命中页。
+    - 对 `follow_up` 构造对话焦点，显式把上一轮问答提供给模型。
+    - 检索记录拆成更细粒度：
+      - 章节记录
+      - 公式记录
+      - 例题记录
+      - 章节总览记录
+  - `backend/app/services/retrieval.py`
+    - `rank_fragments()` 增加 `question_type`
+    - 对 `formula / exercise / follow_up / mastery / concepts` 增加意图加权，减少“问公式却只命中概念段”的情况
+  - `backend/app/services/ai_client.py`
+    - `answer_question()` 增加：
+      - `question_type`
+      - `conversation_focus`
+    - 按问题类型注入固定回答骨架：
+      - `concepts` 固定输出 3 个概念
+      - `mastery` 固定输出掌握清单
+      - `formula` 固定输出“核心公式 / 符号含义 / 怎么理解”
+      - `exercise` 固定输出“练习题 / 解题思路 / 详细解答 / 易错点”
+      - `follow_up` 固定按步骤继续解上一题
+    - 明确要求聊天里优先用纯文本数学表达式，避免 `\frac` 类 LaTeX 命令造成 JSON 损坏。
+    - `_extract_json()` 增加 JSON 文本清洗：
+      - 修复字符串中的裸换行
+      - 对常见 LaTeX 命令做转义保护
+      - 降低 chat 回答因 JSON 解析失败而直接报错的概率
+- 过程脚本：
+  - 新增 `tmp/chat_quality_probe.py`
+  - 用途：上传真实 `罚函数法.pdf`，逐轮回放用户的实际 9 条问题，检查回答长度、来源和承接效果
+  - 新增 `.gitignore` 条目：
+    - `tmp/chat_quality_runs/`
+- 本阶段验证：
+  - 后端语法检查：
+    - 命令：`conda run -n assistant python -m compileall backend`
+    - 结果：通过
+  - 真实对话回归：
+    - 命令：`PYTHONPATH=/Users/wanghaohua/Desktop/毕业实习 conda run -n assistant python /Users/wanghaohua/Desktop/毕业实习/tmp/chat_quality_probe.py`
+    - 关键结果：
+      - `11` / `123` 不再胡答，而是返回澄清提示
+      - “用数学公式帮我讲一下”返回纯文本公式，不再出现 `\frac` 类乱码
+      - “帮我出个练习题并且仔细讲一下吧”返回练习题、思路、详细解答、易错点
+      - “怎么解决”能够承接上一轮练习题，继续按步骤求解
+
+## Phase 19 - 答辩 PPT 制作
+
+- 触发原因：
+  - 用户要求基于项目内容制作一套课程答辩用 PPT，并显式点名 `slides` skill。
+- 环境检查：
+  - 本机未预装可直接 `require('pptxgenjs')` 的 Node 包。
+  - 本机无 `soffice` 命令，`slides` skill 自带的 `render_slides.py / slides_test.py` 依赖链不完整。
+  - 本机存在 `Microsoft PowerPoint.app` 与 `qlmanage`，可作为预览兜底。
+- 实现方式：
+  - 新建交付目录：
+    - `deliverables/slides/courseware_review_defense/`
+  - 复制 `pptxgenjs_helpers/` 到该目录。
+  - 在该目录中通过本地 `npm install --no-save` vendor `pptxgenjs` 及其运行时依赖，仅作用于 deck workspace，不影响主项目。
+  - 作者文件：
+    - `deliverables/slides/courseware_review_defense/courseware_review_defense.js`
+  - 交付 deck：
+    - `deliverables/slides/courseware_review_defense/courseware_review_defense.pptx`
+  - 辅助脚本：
+    - `deliverables/slides/courseware_review_defense/build_deck.sh`
+    - `deliverables/slides/courseware_review_defense/render_preview.sh`
+    - `deliverables/slides/courseware_review_defense/README.md`
+- 内容结构：
+  - 固定 14 页，覆盖：
+    - 封面
+    - 背景与痛点
+    - 项目目标与核心价值
+    - 功能总览
+    - 系统工作流
+    - 主工作台界面
+    - 课件解析与章节组织
+    - 智能学习笔记生成
+    - 研究对话区
+    - 学习任务与测试环境
+    - 技术架构
+    - 关键实现难点与解决方案
+    - 项目成果与当前效果
+    - 总结与展望
+  - 素材来源：
+    - `tmp/current_ui_rewrite_loaded.png`
+    - `designs/exports/r0GqG.png`
+    - `designs/exports/Z2wV6.png`
+- 版式与风格：
+  - 16:9
+  - 中文答辩风格
+  - 冷白底、蓝灰主色、铜棕强调
+  - PowerPoint 原生形状绘制流程图与架构图
+- 验证结果：
+  - 生成命令：
+    - `node courseware_review_defense.js`
+    - 成功输出 `.pptx`
+  - 页数检查：
+    - `conda run -n assistant python -c "from pptx import Presentation; prs=Presentation(...); print('slides', len(prs.slides))"`
+    - 结果：`slides 14`
+  - 预览图：
+    - 使用 `qlmanage` 生成 `review/courseware_review_defense.pptx.png`
+    - 使用 `create_montage.py` 生成 `review/montage.png`
+  - 说明：
+    - 由于本机缺少 `soffice` 与 `render_slides.py / slides_test.py` 所需依赖，本轮采用 Quick Look 预览作为可用验证兜底。
+
+## Phase 20 - 答辩稿与配音素材
+
+- 触发原因：
+  - 用户希望基于已生成的 14 页答辩 PPT，进一步产出完整答辩稿，并配一条约 10 分钟的总音频。
+- 已完成交付：
+  - 逐页讲稿：
+    - `deliverables/slides/courseware_review_defense/notes/courseware_review_defense_script.md`
+  - 完整串讲稿：
+    - `deliverables/slides/courseware_review_defense/notes/courseware_review_defense_full_narration.txt`
+  - TTS 指令说明：
+    - `deliverables/slides/courseware_review_defense/notes/courseware_review_defense_tts_instructions.txt`
+  - 一键配音脚本：
+    - `deliverables/slides/courseware_review_defense/generate_voiceover.sh`
+  - 音频状态说明：
+    - `output/speech/courseware_review_defense/README.md`
+- 内容策略：
+  - 逐页讲稿严格对应当前 14 页 deck 结构
+  - 口吻固定为“稳重答辩风”
+  - 总稿写成可直接连续朗读的完整版本，不是简单逐页拼接标题
+- 可用性检查：
+  - `.env` 中 `OPENAI_API_KEY` 已设置
+  - `conda run -n assistant python -c "import importlib.util; print(importlib.util.find_spec('openai') is not None)"` 返回可用
+  - 总稿字数检查：
+    - 命令：`python -c "..."` 统计 `courseware_review_defense_full_narration.txt`
+    - 结果：`3039` 字符，小于 `4096`，理论上可走单条 TTS
+- 音频阻塞排查：
+  - 使用 speech skill 指定 CLI 进行真实小样本配音：
+    - 命令：`text_to_speech.py speak --input "你好，这是答辩配音测试。"...`
+  - 发现两层问题：
+    1. 当前本机 `openai` SDK 的 `audio.speech.create` 不接受 `instructions` 参数，因此不能按 skill 中“带 instructions”直接调用
+    2. 去掉 `instructions` 后继续验证，当前 `.codex` 中转 `OPENAI_BASE_URL=http://154.44.8.251:3400/openai` 对音频接口返回 `404`
+  - 进一步验证了以下路径均不可用：
+    - `/openai/audio/speech`
+    - `/openai/v1/audio/speech`
+    - `/audio/speech`
+    - `/v1/audio/speech`
+  - 尝试绕过中转直连官方 OpenAI Audio API：
+    - 结果：`401 invalid_api_key`
+- 结论：
+  - 当前这套 `OPENAI_API_KEY + OPENAI_BASE_URL` 组合可以用于 `Responses API`，但不能用于 `Audio Speech API`
+  - 因此本轮已把讲稿与配音脚本交付完成，但无法实际生成最终总音频文件
+  - 后续可执行路径：
+    - 一旦用户提供支持 `Audio Speech API` 的官方 OpenAI key，或提供一个支持 `/audio/speech` 的兼容中转，运行：
+    - `deliverables/slides/courseware_review_defense/generate_voiceover.sh`
+  - 即可直接输出：
+    - `output/speech/courseware_review_defense/courseware_review_defense_full.wav`
+
+## Phase 21 - 阿里云百炼语音生成
+
+- 触发原因：
+  - 用户说明 `.env` 末尾注释里放了阿里云百炼语音合成所需的凭据，希望直接用它生成配音。
+- 关键发现：
+  - `.env` 末尾注释中附带了可用于阿里云百炼语音接口的 bearer 凭据
+  - 该凭据可直接用于阿里云百炼 `Authorization: Bearer ...` 请求头
+  - 使用官方 HTTP 接口：
+    - `POST https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`
+  - 小样本验证成功返回：
+    - `output.audio.url`
+    - `usage.characters`
+- 实现方式：
+  - 新增脚本：
+    - `deliverables/slides/courseware_review_defense/generate_aliyun_voiceover.py`
+  - 脚本能力：
+    - 从 `courseware_review_defense_script.md` 解析 14 页逐页口播正文
+    - 用阿里云百炼 `qwen3-tts-instruct-flash` 逐页生成 `wav`
+    - 保存到：
+      - `output/speech/courseware_review_defense/chunks/slide-01.wav` 到 `slide-14.wav`
+    - 最终将所有 chunk 拼接为：
+      - `output/speech/courseware_review_defense/courseware_review_defense_full.wav`
+    - 同步写入：
+      - `output/speech/courseware_review_defense/courseware_review_defense_manifest.json`
+  - 语音设定：
+    - voice: `Cherry`
+    - language_type: `Chinese`
+    - instructions: 稳重、正式、答辩讲解风格
+- 过程问题与修复：
+  - 初次合并失败，原因不是编码不同，而是错误把 `nframes` 也当作参数一致性条件。
+  - 修复后改为只比较声道数、采样宽度、采样率和压缩类型。
+  - 随后重新按现有 chunk 合并成功。
+- 本阶段验证：
+  - chunk 时长检查：
+    - `slide-01.wav` 到 `slide-14.wav` 全部存在
+    - 所有 chunk 总时长约 `635.04` 秒
+  - 总音频合并结果：
+    - `courseware_review_defense_full.wav`
+    - 实测总时长约 `638.22` 秒
+  - 产物检查：
+    - `courseware_review_defense_manifest.json` 已生成
+    - `output/speech/courseware_review_defense/README.md` 已改为成功交付说明
+
+## Phase 22 - 项目海报 PDF 制作
+
+- 触发原因：
+  - 用户要求制作一张 PDF 格式的项目海报，视觉设计清晰，体现项目核心亮点与技术创新，并明确要求去掉真实结果展示。
+- 环境与约束确认：
+  - `reportlab` 不可用，且当前环境不可修改
+  - `Pillow` 可用
+  - `pdftoppm` 可用
+  - 可复用素材：
+    - `tmp/current_ui_rewrite_loaded.png`
+    - `designs/exports/r0GqG.png`
+    - `designs/exports/Z2wV6.png`
+  - 可用字体：
+    - `/System/Library/Fonts/Supplemental/Songti.ttc`
+    - `/System/Library/Fonts/STHeiti Medium.ttc`
+    - `/System/Library/AssetsV2/.../PingFang.ttc`
+- 实现方式：
+  - 新建目录：
+    - `deliverables/poster/courseware_review_assistant/`
+  - 使用 `Pillow` 绘制 A2 竖版画布：
+    - 尺寸：`4961 x 7016`
+  - 脚本文件：
+    - `deliverables/poster/courseware_review_assistant/build_poster.py`
+  - 生成中间大图：
+    - `deliverables/poster/courseware_review_assistant/courseware_review_assistant_poster.png`
+  - 输出最终 PDF：
+    - `output/pdf/courseware_review_assistant_poster.pdf`
+  - 预览图：
+    - `deliverables/poster/courseware_review_assistant/review/poster_page.png`
+  - 说明文件：
+    - `deliverables/poster/courseware_review_assistant/README.md`
+- 内容结构：
+  - 标题区
+  - 项目背景与目标
+  - 系统工作流
+  - 核心功能亮点
+  - 技术创新点
+  - 项目亮点浓缩区
+  - 界面展示区
+  - 总结与展望
+  - 明确去掉“真实结果展示”区域
+- 视觉方向：
+  - 冷白底
+  - 深蓝标题区
+  - 蓝灰模块
+  - 铜棕强调
+  - 强调项目能力与流程，不做截图拼贴海报
+- 本阶段验证：
+  - 海报生成：
+    - 命令：`python3 deliverables/poster/courseware_review_assistant/build_poster.py`
+    - 结果：PNG 与 PDF 成功生成
+  - PDF 渲染：
+    - 命令：`cd deliverables/poster/courseware_review_assistant && pdftoppm -png -singlefile ../../../output/pdf/courseware_review_assistant_poster.pdf review/poster_page`
+    - 结果：预览图成功生成
+  - 当前交付路径：
+    - `output/pdf/courseware_review_assistant_poster.pdf`
+    - `deliverables/poster/courseware_review_assistant/review/poster_page.png`
+
+## Phase 23 - 2.2 项目具体工作 LaTeX 文档
+
+- 触发原因：
+  - 用户要求基于本项目完整开发过程，额外编写一份只覆盖“2.2 项目具体工作”的 PDF 文档，采用 LaTeX 编写并直接编译完成。
+- 环境确认：
+  - 本机可用：
+    - `xelatex`
+    - `latexmk`
+    - `pdftoppm`
+  - 当前仓库可复用材料：
+    - `README.md`
+    - `tmp/CHECKLIST.md`
+    - `tmp/BUILD_LOG.md`
+    - `backend/app/main.py`
+    - `backend/app/services/ai_client.py`
+    - `backend/app/services/parsers.py`
+    - `frontend/src/App.tsx`
+    - `frontend/src/components/LearningBoard.tsx`
+    - `deliverables/slides/courseware_review_defense/`
+    - `output/speech/courseware_review_defense/`
+    - `output/pdf/courseware_review_assistant_poster.pdf`
+- 实现方式：
+  - 新建目录：
+    - `deliverables/report_2_2/`
+  - 主文件：
+    - `deliverables/report_2_2/report_2_2.tex`
+  - 额外清单：
+    - `deliverables/report_2_2/screenshot_placeholder_list.md`
+  - 文档风格：
+    - `ctexart`
+    - 中文课程报告风
+    - 仅覆盖 `2.2.1 - 2.2.5`
+  - 图像处理：
+    - 不直接插真实截图
+    - 使用 `\placeholderfigure` 统一绘制图框 + 说明文字
+    - 让文档在无截图条件下也能完整编译
+- 正文内容：
+  - `2.2.1 项目前期准备`
+  - `2.2.2 Vibe Coding 开发过程`
+  - `2.2.3 项目成果展示`
+  - `2.2.4 Vibe Coding 方法论总结`
+  - `2.2.5 技术创新点`
+  - 并在文末附“待补截图清单”
+- 编译问题与修复：
+  - 首轮编译出现：
+    - `_` 在占图来源里触发数学模式错误
+    - 清单表格英文占位名过长导致 overfull
+    - `fancyhdr` 头部高度告警
+  - 修复方式：
+    - 对文件名使用 `\texttt{...}` 和转义下划线
+    - 使用 `makecell` 拆分占位编号
+    - 补 `\setlength{\headheight}{15pt}`
+  - 修复后 `latexmk -xelatex` 成功输出 PDF
+- 本阶段验证：
+  - 编译：
+    - 命令：`cd deliverables/report_2_2 && latexmk -xelatex -interaction=nonstopmode report_2_2.tex`
+    - 结果：成功生成 `report_2_2.pdf`
+  - 渲染预览：
+    - 命令：`cd deliverables/report_2_2 && pdftoppm -png -singlefile report_2_2.pdf review/report_2_2_page`
+    - 结果：成功生成 `review/report_2_2_page.png`
+  - 当前交付路径：
+    - `deliverables/report_2_2/report_2_2.tex`
+    - `deliverables/report_2_2/report_2_2.pdf`
+    - `deliverables/report_2_2/review/report_2_2_page.png`
+    - `deliverables/report_2_2/screenshot_placeholder_list.md`

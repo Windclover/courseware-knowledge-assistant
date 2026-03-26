@@ -1,0 +1,8 @@
+Voice Affect: Confident and composed.
+Tone: Formal, calm, presentation-ready.
+Pacing: Steady and moderate.
+Emotion: Restrained confidence and clarity.
+Pronunciation: Enunciate “FastAPI”, “SQLite”, “OpenAI”, “Responses API”, “Learning Board”, “OCR”.
+Pauses: Brief pause after each slide-level paragraph and before the final summary.
+Emphasis: Stress project name, core functions, technical keywords, and key result numbers.
+Delivery: Smooth academic presentation cadence, like a course defense rather than a marketing pitch.

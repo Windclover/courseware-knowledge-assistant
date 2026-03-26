@@ -59,6 +59,8 @@ def init_database() -> None:
                 title TEXT NOT NULL,
                 detailed_explanation TEXT NOT NULL,
                 key_points_json TEXT NOT NULL,
+                formula_notes_json TEXT NOT NULL DEFAULT '[]',
+                worked_examples_json TEXT NOT NULL DEFAULT '[]',
                 quiz_json TEXT NOT NULL,
                 source_refs_json TEXT NOT NULL
             );
@@ -77,6 +79,18 @@ def init_database() -> None:
             """
         )
         _ensure_column(connection, "documents", "learning_board_json", "TEXT")
+        _ensure_column(
+            connection,
+            "sections",
+            "formula_notes_json",
+            "TEXT NOT NULL DEFAULT '[]'",
+        )
+        _ensure_column(
+            connection,
+            "sections",
+            "worked_examples_json",
+            "TEXT NOT NULL DEFAULT '[]'",
+        )
 
 
 def _ensure_column(

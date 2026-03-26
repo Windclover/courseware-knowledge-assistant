@@ -14,6 +14,7 @@ def rank_fragments(
     records: list[dict[str, str | int | None]],
     *,
     limit: int,
+    question_type: str = "general",
 ) -> list[RetrievalHit]:
     query_counter = Counter(_tokenize(question))
     hits: list[RetrievalHit] = []
@@ -24,6 +25,7 @@ def rank_fragments(
         if not content:
             continue
         score = _score_text(query_counter, f"{title}\n{content}")
+        score += _score_by_question_type(question_type, title, content)
         if title and any(token in title for token in query_counter):
             score += 1.5
         if score <= 0:
@@ -74,3 +76,14 @@ def _tokenize(text: str) -> list[str]:
         else:
             tokens.append(token)
     return tokens
+
+
+def _score_by_question_type(question_type: str, title: str, content: str) -> float:
+    text = f"{title}\n{content}"
+    if question_type == "formula":
+        return 2.5 if any(token in text for token in ("公式", "$$", "σ", "∇", "min", "argmin", "约束")) else 0.0
+    if question_type in {"exercise", "follow_up"}:
+        return 2.8 if any(token in text for token in ("例题", "步骤", "答案：", "解题")) else 0.0
+    if question_type in {"mastery", "concepts", "summary"}:
+        return 1.8 if any(token in text for token in ("关键知识点", "章节", "总览", "概念")) else 0.0
+    return 0.0

@@ -89,3 +89,57 @@
   - 验收标准：对话默认综合课件+学习笔记；Learning Board 与测试环境联动合理；上传和导出按钮只保留一处；构建和烟测继续通过。
   - 证据：`frontend/src/App.tsx`；`frontend/src/components/TopBar.tsx`；`frontend/src/components/SourceRail.tsx`；`frontend/src/components/ChatStage.tsx`；`frontend/src/components/LearningBoard.tsx`；`backend/app/main.py`；`backend/app/services/ai_client.py`
   - 已验证：`npm run build` 成功；`tmp/test_smoke.py` 输出 `assessment 200 2`；导出逻辑改为顶部统一按钮。
+
+- [x] Phase 15：隔离烟测数据并恢复首页空状态
+  - 计划：修复 `tmp/test_smoke.py` 污染真实 `data/app.db` 的问题；为后端数据路径增加环境变量覆盖；清空真实样例数据并验证首页恢复为空。
+  - 验收标准：`GET /api/documents` 在真实库上返回空数组；运行 `tmp/test_smoke.py` 后真实库仍为空；首页不再出现 `sample_courseware`。
+  - 证据：`backend/app/config.py`；`tmp/test_smoke.py`；`.gitignore`；`data/app.db`
+  - 已验证：`sqlite3 data/app.db "SELECT COUNT(*) FROM documents;"` 返回 `0`；`conda run -n assistant python -c "from fastapi.testclient import TestClient; from backend.app.main import app; client=TestClient(app); print(client.get('/api/documents').json())"` 在烟测前后都返回 `[]`；隔离产物位于 `tmp/smoke_runs/`。
+
+- [x] Phase 16：真实 Qwen 接口问答长度调优
+  - 计划：使用真实百炼 `qwen-turbo` 跑一轮实际上传与两轮对话，确认“回答过短”的现象；随后调整后端提示词与输出预算，再做回归验证。
+  - 验收标准：真实接口可成功生成课件笔记并完成两轮问答；追问回答长度明显提升，不再只停留在 1-2 句短答。
+  - 证据：`backend/app/services/ai_client.py`；`tmp/real_qwen_probe.py`
+  - 已验证：第一次真实回归中 `chat1_len=204`、`chat2_len=94`；调优后再次回归为 `chat1_len=254`、`chat2_len=234`。
+
+- [x] Phase 17：数学课件笔记与计算题链路增强
+  - 计划：修复 PDF 标题切分、为章节新增公式与例题结构、让 Markdown 输出更像笔记，并让 assessment 支持计算题与完整导出字段。
+  - 验收标准：真实 `罚函数法.pdf` 不再只生成 1 个 section；Markdown 包含公式和例题步骤；assessment 中出现计算题；前后端构建通过。
+  - 证据：`backend/app/services/parsers.py`；`backend/app/services/section_builder.py`；`backend/app/services/ai_client.py`；`backend/app/services/markdown_writer.py`；`backend/app/schemas.py`；`frontend/src/App.tsx`；`frontend/src/components/LearningBoard.tsx`
+  - 已验证：`罚函数法.pdf` 真实回归中 `sections=11`、`markdown_len=11025`、assessment 含 `2` 道 calculation 题；`npm run build` 与 `conda run -n assistant python -m compileall backend` 通过；`tmp/test_smoke.py` 恢复通过。
+
+- [x] Phase 18：研究对话区质量修复
+  - 计划：修复聊天经常退化成“泛化总结”的问题，增强问题类型识别、上下文承接、公式表达稳定性和练习题连续追问能力。
+  - 验收标准：`11/123` 这类低信息输入不再胡答；“用数学公式讲一下”能输出可读公式；“帮我出个练习题 / 怎么解决”能承接上一轮；后端编译继续通过。
+  - 证据：`backend/app/main.py`；`backend/app/services/retrieval.py`；`backend/app/services/ai_client.py`；`tmp/chat_quality_probe.py`
+  - 已验证：真实 `罚函数法.pdf` 九轮对话回归中，`11/123` 返回澄清提示；公式回答不再出现 JSON 转义乱码；练习题与“怎么解决”已承接同一道题。
+
+- [x] Phase 19：答辩 PPT 交付
+  - 计划：基于现有项目内容、界面截图和答辩结构要求，制作一套 14 页中文答辩 PPT，并交付可编辑 `.pptx + .js`。
+  - 验收标准：PPT 成功生成；页数为 14 页；包含封面、背景、功能、流程、架构、难点、成果、展望等固定内容；提供预览图与重建脚本。
+  - 证据：`deliverables/slides/courseware_review_defense/courseware_review_defense.js`；`deliverables/slides/courseware_review_defense/courseware_review_defense.pptx`；`deliverables/slides/courseware_review_defense/README.md`
+  - 已验证：`node courseware_review_defense.js` 成功输出 `.pptx`；`conda run -n assistant python -c "from pptx import Presentation; ..."` 返回 `slides 14`；Quick Look 预览图与 montage 已生成到 `deliverables/slides/courseware_review_defense/review/`。
+
+- [x] Phase 20：答辩稿与配音素材交付
+  - 计划：围绕现有 14 页答辩 PPT 产出逐页讲稿、完整串讲稿和一键配音脚本；若音频接口可用则直接生成总音频，不可用则明确记录阻塞与复现方式。
+  - 验收标准：逐页讲稿与完整总稿落盘；存在一键配音脚本；明确验证当前 Audio API 可用性；如果不可用则给出阻塞说明与后续可执行命令。
+  - 证据：`deliverables/slides/courseware_review_defense/notes/courseware_review_defense_script.md`；`deliverables/slides/courseware_review_defense/notes/courseware_review_defense_full_narration.txt`；`deliverables/slides/courseware_review_defense/generate_voiceover.sh`；`output/speech/courseware_review_defense/README.md`
+  - 已验证：逐页讲稿、总稿、TTS 指令文件与生成脚本已创建；当前 `.codex` 中转不支持 `Audio Speech API`，官方接口又返回 `401 invalid_api_key`，因此音频未能在本轮直接生成，阻塞已记录。
+
+- [x] Phase 21：切换阿里云百炼语音合成并生成总音频
+  - 计划：使用 `.env` 注释中的阿里云百炼 key 作为 `DASHSCOPE_API_KEY`，通过阿里云官方 HTTP 接口逐页生成 wav，再拼接为一条完整答辩音频。
+  - 验收标准：14 段逐页音频全部生成；总音频成功合并；存在 manifest；总时长接近 10 分钟。
+  - 证据：`deliverables/slides/courseware_review_defense/generate_aliyun_voiceover.py`；`output/speech/courseware_review_defense/chunks/`；`output/speech/courseware_review_defense/courseware_review_defense_full.wav`
+  - 已验证：14 段 `slide-01.wav` 到 `slide-14.wav` 已生成；总音频 `courseware_review_defense_full.wav` 已生成；manifest 已生成；总时长约 `638.22` 秒。
+
+- [x] Phase 22：项目海报 PDF 交付
+  - 计划：基于现有项目内容与界面素材，制作一张 A2 竖版项目海报，突出项目价值、流程、亮点和技术创新，不展示真实结果数据。
+  - 验收标准：成功生成海报 PNG 与 PDF；使用 `pdftoppm` 渲染预览；海报单页、结构清晰、适合答辩展示。
+  - 证据：`deliverables/poster/courseware_review_assistant/build_poster.py`；`output/pdf/courseware_review_assistant_poster.pdf`；`deliverables/poster/courseware_review_assistant/review/poster_page.png`
+  - 已验证：海报 PNG 与 PDF 已生成；`pdftoppm` 成功渲染预览图；海报未包含真实结果展示或个人信息。
+
+- [x] Phase 23：2.2 项目具体工作 LaTeX 文档交付
+  - 计划：只覆盖 `2.2.1 - 2.2.5`，基于当前项目代码、日志、PPT、海报、答辩稿和对话记录，写成中文课程报告风 LaTeX 文档，并使用占图盒子保留所有待补截图位置。
+  - 验收标准：`report_2_2.tex` 可直接编译为 PDF；正文结构完整；无真实截图时也能成功输出；提供待补截图清单。
+  - 证据：`deliverables/report_2_2/report_2_2.tex`；`deliverables/report_2_2/report_2_2.pdf`；`deliverables/report_2_2/screenshot_placeholder_list.md`
+  - 已验证：`latexmk -xelatex` 成功生成 `report_2_2.pdf`；`pdftoppm` 成功渲染第一页预览图；截图清单已单独导出。

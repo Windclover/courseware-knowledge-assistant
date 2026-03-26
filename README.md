@@ -1,6 +1,6 @@
 # 课件智能知识点复习助手
 
-一个面向课程大作业的本地 Web 应用：上传课程 `PPTX/PDF` 后，系统会自动提取课件内容，调用阿里云百炼 `qwen-turbo` 生成学习笔记与复习任务台。用户可以围绕课件与学习笔记继续提问，完成任务后进入测试环境，完成选择题与填空题练习。
+一个面向课程大作业的本地 Web 应用：上传课程 `PPTX/PDF` 后，系统会自动提取课件内容，调用 OpenAI 兼容接口生成学习笔记与复习任务台。用户可以围绕课件与学习笔记继续提问，完成任务后进入测试环境，完成选择题与填空题练习。
 
 ## 核心能力
 
@@ -16,7 +16,7 @@
 
 - 前端：React + TypeScript + Vite
 - 后端：FastAPI + SQLite
-- 模型：阿里云百炼 `qwen-turbo`
+- 模型：OpenAI 兼容模型，默认 `gpt-5.4`
 - 文本提取：`python-pptx`、`PyMuPDF`
 
 ## 项目结构
@@ -64,7 +64,7 @@ npm install
 
 ### 3. 配置环境变量
 
-复制根目录 `.env.example` 为 `.env`，填入百炼 API Key：
+复制根目录 `.env.example` 为 `.env`，填入 OpenAI API Key：
 
 ```bash
 cp .env.example .env
@@ -72,9 +72,10 @@ cp .env.example .env
 
 关键变量：
 
-- `QWEN_API_KEY`：阿里云百炼 API Key
-- `QWEN_BASE_URL`：默认 `https://dashscope.aliyuncs.com/compatible-mode/v1`
-- `QWEN_MODEL`：默认 `qwen-turbo`
+- `OPENAI_API_KEY`：OpenAI API Key
+- `OPENAI_BASE_URL`：默认 `https://api.openai.com/v1`
+- `OPENAI_MODEL`：默认 `gpt-5.4`
+- `OPENAI_REASONING_EFFORT`：默认 `medium`
 
 ### 4. 启动后端
 

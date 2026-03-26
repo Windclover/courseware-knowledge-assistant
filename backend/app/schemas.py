@@ -26,6 +26,8 @@ class SectionNote(BaseModel):
     title: str
     detailed_explanation: str
     key_points: list[str] = Field(default_factory=list)
+    formula_notes: list["FormulaNote"] = Field(default_factory=list)
+    worked_examples: list["WorkedExample"] = Field(default_factory=list)
     source_refs: list[str] = Field(default_factory=list)
 
 
@@ -86,6 +88,22 @@ class LearningBoard(BaseModel):
     review_path: list[LearningReviewStep] = Field(default_factory=list)
 
 
+class FormulaNote(BaseModel):
+    title: str
+    latex: str = ""
+    raw_text: str = ""
+    explanation: str = ""
+    source_refs: list[str] = Field(default_factory=list)
+
+
+class WorkedExample(BaseModel):
+    title: str
+    problem: str
+    steps: list[str] = Field(default_factory=list)
+    final_answer: str = ""
+    source_refs: list[str] = Field(default_factory=list)
+
+
 class AssessmentQuestionOption(BaseModel):
     id: str
     text: str
@@ -93,12 +111,14 @@ class AssessmentQuestionOption(BaseModel):
 
 class AssessmentQuestion(BaseModel):
     id: str
-    type: Literal["choice", "blank"]
+    type: Literal["choice", "blank", "calculation"]
     prompt: str
     options: list[AssessmentQuestionOption] = Field(default_factory=list)
     answer: str = ""
+    display_answer: str = ""
     acceptable_answers: list[str] = Field(default_factory=list)
     explanation: str
+    solution_steps: list[str] = Field(default_factory=list)
 
 
 class AssessmentSuite(BaseModel):

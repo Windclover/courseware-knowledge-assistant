@@ -1,4 +1,13 @@
+import os
 from pathlib import Path
+from uuid import uuid4
+
+
+TMP_DIR = Path("tmp")
+SMOKE_ROOT = TMP_DIR / "smoke_runs" / uuid4().hex[:8]
+os.environ["APP_DATABASE_PATH"] = str(SMOKE_ROOT / "app.db")
+os.environ["APP_UPLOAD_ROOT"] = str(SMOKE_ROOT / "uploads")
+os.environ["APP_OUTPUT_ROOT"] = str(SMOKE_ROOT / "outputs")
 
 import fitz
 from fastapi.testclient import TestClient
@@ -11,15 +20,14 @@ from backend.app.schemas import (
     AssessmentQuestion,
     AssessmentQuestionOption,
     AssessmentSuite,
+    FormulaNote,
     LearningBoard,
     LearningConceptItem,
     LearningPracticeItem,
     LearningReviewStep,
     LearningSummaryItem,
+    WorkedExample,
 )
-
-
-TMP_DIR = Path("tmp")
 
 
 class FakeQwen:
@@ -31,6 +39,24 @@ class FakeQwen:
             key_points=[
                 "监督学习依赖带标签数据",
                 "分类与回归是典型任务",
+            ],
+            formula_notes=[
+                FormulaNote(
+                    title="监督学习映射关系",
+                    latex="y = f(x)",
+                    raw_text="",
+                    explanation="监督学习学习输入到输出的映射关系。",
+                    source_refs=draft.source_refs,
+                )
+            ],
+            worked_examples=[
+                WorkedExample(
+                    title="分类与回归例题",
+                    problem="判断垃圾邮件识别和房价预测分别属于哪类任务。",
+                    steps=["识别输出类型。", "离散类别对应分类，连续数值对应回归。"],
+                    final_answer="垃圾邮件识别是分类，房价预测是回归。",
+                    source_refs=draft.source_refs,
+                )
             ],
             source_refs=draft.source_refs,
         )
@@ -92,12 +118,14 @@ class FakeQwen:
                 ),
                 AssessmentQuestion(
                     id="q2",
-                    type="blank",
+                    type="calculation",
                     prompt="分类与____是两类典型监督学习任务。",
                     options=[],
                     answer="回归",
+                    display_answer="回归",
                     acceptable_answers=["回归"],
                     explanation="课件中明确指出分类与回归是典型监督学习任务。",
+                    solution_steps=["先识别监督学习的常见任务。", "课件明确给出分类与回归。"],
                 ),
             ],
         )
@@ -112,16 +140,16 @@ class FakeQwen:
 
 
 def create_sample_files() -> tuple[Path, Path]:
-    TMP_DIR.mkdir(exist_ok=True)
+    SMOKE_ROOT.mkdir(parents=True, exist_ok=True)
 
-    pptx_path = TMP_DIR / "sample_courseware.pptx"
+    pptx_path = SMOKE_ROOT / "sample_courseware.pptx"
     presentation = Presentation()
     slide = presentation.slides.add_slide(presentation.slide_layouts[1])
     slide.shapes.title.text = "监督学习"
     slide.placeholders[1].text = "监督学习依赖带标签数据\n常见任务包括分类和回归"
     presentation.save(pptx_path)
 
-    pdf_path = TMP_DIR / "sample_courseware.pdf"
+    pdf_path = SMOKE_ROOT / "sample_courseware.pdf"
     document = fitz.open()
     page = document.new_page()
     page.insert_text(
@@ -154,6 +182,9 @@ def main() -> None:
                     files={"file": (file_path.name, handle, content_type)},
                 )
             payload = response.json()
+            if response.status_code != 200:
+                print("upload_failed", file_path.name, response.status_code, payload)
+                return
             last_document_id = payload["document"]["id"]
             print(
                 file_path.name,

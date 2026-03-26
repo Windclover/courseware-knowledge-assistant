@@ -1,0 +1,106 @@
+{
+  "model": "qwen3-tts-instruct-flash",
+  "voice": "Cherry",
+  "instructions": "语气稳重，正式，适合课程答辩讲解。语速中等偏慢，吐字清晰。",
+  "chunks": [
+    {
+      "slide": 1,
+      "title": "封面",
+      "request_id": "73f4341f-22c3-4004-83a8-5b3755f9a0f8",
+      "output": "/Users/wanghaohua/Desktop/毕业实习/output/speech/courseware_review_defense/chunks/slide-01.wav",
+      "characters": 289
+    },
+    {
+      "slide": 2,
+      "title": "项目背景与痛点",
+      "request_id": "067a3d26-6d55-458a-8398-36671bd43723",
+      "output": "/Users/wanghaohua/Desktop/毕业实习/output/speech/courseware_review_defense/chunks/slide-02.wav",
+      "characters": 409
+    },
+    {
+      "slide": 3,
+      "title": "项目目标与核心价值",
+      "request_id": "5c9b836f-38fd-447a-a1b4-fe94d1b8946f",
+      "output": "/Users/wanghaohua/Desktop/毕业实习/output/speech/courseware_review_defense/chunks/slide-03.wav",
+      "characters": 360
+    },
+    {
+      "slide": 4,
+      "title": "整体功能总览",
+      "request_id": "d2a042a5-31b9-4a2b-ba95-86e3d6150079",
+      "output": "/Users/wanghaohua/Desktop/毕业实习/output/speech/courseware_review_defense/chunks/slide-04.wav",
+      "characters": 339
+    },
+    {
+      "slide": 5,
+      "title": "系统工作流",
+      "request_id": "84677479-1fe7-4503-90cf-225fc7e1fdc7",
+      "output": "/Users/wanghaohua/Desktop/毕业实习/output/speech/courseware_review_defense/chunks/slide-05.wav",
+      "characters": 374
+    },
+    {
+      "slide": 6,
+      "title": "界面展示：主工作台",
+      "request_id": "0ac55dff-1f8c-4f81-9498-376d8c573085",
+      "output": "/Users/wanghaohua/Desktop/毕业实习/output/speech/courseware_review_defense/chunks/slide-06.wav",
+      "characters": 347
+    },
+    {
+      "slide": 7,
+      "title": "核心功能一：课件解析与章节组织",
+      "request_id": "f0497693-dcf5-4d4e-84c0-0d91146fc9b3",
+      "output": "/Users/wanghaohua/Desktop/毕业实习/output/speech/courseware_review_defense/chunks/slide-07.wav",
+      "characters": 434
+    },
+    {
+      "slide": 8,
+      "title": "核心功能二：智能学习笔记生成",
+      "request_id": "8345b33b-57ec-4166-ad60-e907e5f5b162",
+      "output": "/Users/wanghaohua/Desktop/毕业实习/output/speech/courseware_review_defense/chunks/slide-08.wav",
+      "characters": 399
+    },
+    {
+      "slide": 9,
+      "title": "核心功能三：研究对话区",
+      "request_id": "a24329d8-df46-4d14-b1be-67440aec4e0b",
+      "output": "/Users/wanghaohua/Desktop/毕业实习/output/speech/courseware_review_defense/chunks/slide-09.wav",
+      "characters": 434
+    },
+    {
+      "slide": 10,
+      "title": "核心功能四：学习任务与测试环境",
+      "request_id": "c2e5dfe2-eb1d-4975-9f20-1a4675432c15",
+      "output": "/Users/wanghaohua/Desktop/毕业实习/output/speech/courseware_review_defense/chunks/slide-10.wav",
+      "characters": 424
+    },
+    {
+      "slide": 11,
+      "title": "技术架构",
+      "request_id": "1e158205-47f5-43cf-b36c-815e271092ea",
+      "output": "/Users/wanghaohua/Desktop/毕业实习/output/speech/courseware_review_defense/chunks/slide-11.wav",
+      "characters": 391
+    },
+    {
+      "slide": 12,
+      "title": "关键实现难点与解决方案",
+      "request_id": "d7b52ba6-95bd-40c3-9720-ac4febc3afbe",
+      "output": "/Users/wanghaohua/Desktop/毕业实习/output/speech/courseware_review_defense/chunks/slide-12.wav",
+      "characters": 446
+    },
+    {
+      "slide": 13,
+      "title": "项目成果与当前效果",
+      "request_id": "0caf7f20-2ab5-4c3a-b896-7b3d3ba98457",
+      "output": "/Users/wanghaohua/Desktop/毕业实习/output/speech/courseware_review_defense/chunks/slide-13.wav",
+      "characters": 394
+    },
+    {
+      "slide": 14,
+      "title": "总结与展望",
+      "request_id": "a87c33e4-fd9b-4cc3-9537-0f57badaa410",
+      "output": "/Users/wanghaohua/Desktop/毕业实习/output/speech/courseware_review_defense/chunks/slide-14.wav",
+      "characters": 352
+    }
+  ],
+  "full_output": "/Users/wanghaohua/Desktop/毕业实习/output/speech/courseware_review_defense/courseware_review_defense_full.wav"
+}

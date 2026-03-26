@@ -2,6 +2,8 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
+from .schemas import FormulaNote, WorkedExample
+
 
 @dataclass(slots=True)
 class ParsedFragment:
@@ -18,6 +20,8 @@ class SectionDraft:
     title: str
     source_refs: list[str]
     source_excerpt: str
+    formula_candidates: list[str]
+    example_candidates: list[str]
 
 
 @dataclass(slots=True)
@@ -26,6 +30,8 @@ class GeneratedSection:
     title: str
     detailed_explanation: str
     key_points: list[str]
+    formula_notes: list[FormulaNote]
+    worked_examples: list[WorkedExample]
     source_refs: list[str]
 
 

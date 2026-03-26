@@ -34,15 +34,18 @@ const compactPanes: Array<{ label: string; value: CompactPane }> = [
 ];
 
 function App() {
+  const [initialUiState] = useState(() => readInitialUiState());
   const [documents, setDocuments] = useState<DocumentSummary[]>([]);
-  const [selectedDocumentId, setSelectedDocumentId] = useState<string | null>(null);
+  const [selectedDocumentId, setSelectedDocumentId] = useState<string | null>(
+    initialUiState.documentId,
+  );
   const [documentDetail, setDocumentDetail] = useState<DocumentDetail | null>(null);
   const [markdownPreview, setMarkdownPreview] = useState<MarkdownPreview | null>(null);
   const [uploading, setUploading] = useState(false);
   const [chatting, setChatting] = useState(false);
   const [question, setQuestion] = useState("");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [compactPane, setCompactPane] = useState<CompactPane>("chat");
+  const [compactPane, setCompactPane] = useState<CompactPane>(initialUiState.pane);
   const [completedTaskIds, setCompletedTaskIds] = useState<Record<string, boolean>>(
     {},
   );
@@ -54,16 +57,13 @@ function App() {
   const [assessmentSubmitted, setAssessmentSubmitted] = useState(false);
 
   useEffect(() => {
-    void refreshDocuments();
-  }, []);
+    if (!initialUiState.documentId) {
+      return;
+    }
+    void refreshDocuments(initialUiState.documentId);
+  }, [initialUiState.documentId]);
 
   const visibleDocuments = buildVisibleDocuments(documents);
-
-  useEffect(() => {
-    if (!selectedDocumentId && visibleDocuments.length > 0) {
-      setSelectedDocumentId(visibleDocuments[0].id);
-    }
-  }, [selectedDocumentId, visibleDocuments]);
 
   useEffect(() => {
     if (!selectedDocumentId) {
@@ -88,9 +88,14 @@ function App() {
     void loadAssessment(documentDetail.id);
   }, [assessment, assessmentLoading, documentDetail, isAssessmentUnlocked]);
 
-  async function refreshDocuments() {
+  async function refreshDocuments(focusDocumentId?: string | null) {
     try {
       const result = await fetchDocuments();
+      if (focusDocumentId && !result.some((item) => item.id === focusDocumentId)) {
+        setDocuments([]);
+        setSelectedDocumentId(null);
+        return;
+      }
       setDocuments(result);
     } catch (error) {
       setErrorMessage((error as Error).message);
@@ -267,8 +272,20 @@ function App() {
       lines.push(`- [${checked}] ${label}`);
     }
 
-    if (assessment && assessmentSubmitted) {
+    if (assessment) {
       lines.push("", `## ${assessment.title}`, "", assessment.intro, "");
+    }
+
+    if (assessment && !assessmentSubmitted) {
+      lines.push("测试已生成但尚未交卷，未附标准答案与结果。", "");
+      assessment.questions.forEach((question, index) => {
+        lines.push(`### 第 ${index + 1} 题（${questionTypeLabel(question.type)}）`);
+        lines.push(question.prompt, "");
+      });
+    }
+
+    if (assessment && assessmentSubmitted) {
+      let correctCount = 0;
       assessment.questions.forEach((question) => {
         const answer = assessmentAnswers[question.id] ?? "未作答";
         const isCorrect =
@@ -277,12 +294,29 @@ function App() {
             : [question.answer, ...question.acceptable_answers]
                 .map(normalizeAnswer)
                 .includes(normalizeAnswer(answer));
+        if (isCorrect) {
+          correctCount += 1;
+        }
         lines.push(`### ${question.prompt}`);
+        lines.push(`- 题型：${questionTypeLabel(question.type)}`);
         lines.push(`- 你的答案：${answer}`);
         lines.push(`- 结果：${isCorrect ? "正确" : "错误"}`);
-        lines.push(`- 正确答案：${question.answer}`);
-        lines.push(`- 解析：${question.explanation}`, "");
+        lines.push(`- 正确答案：${question.display_answer || question.answer}`);
+        lines.push(`- 解析：${question.explanation}`);
+        if (question.solution_steps.length) {
+          lines.push("- 参考步骤：");
+          question.solution_steps.forEach((step, index) => {
+            lines.push(`  ${index + 1}. ${step}`);
+          });
+        }
+        lines.push("");
       });
+      lines.splice(
+        lines.indexOf(`## ${assessment.title}`) + 4,
+        0,
+        `- 得分：${correctCount} / ${assessment.questions.length}`,
+        "",
+      );
     }
 
     const blob = new Blob([lines.join("\n")], {
@@ -314,7 +348,6 @@ function App() {
       />
 
       <TopBar
-        documentDetail={documentDetail}
         uploadInputId={uploadInputId}
         uploading={uploading}
         canExport={canExport}
@@ -475,4 +508,14 @@ export default App;
 
 function normalizeAnswer(value: string): string {
   return value.trim().toLowerCase().replace(/\s+/g, "");
+}
+
+function questionTypeLabel(type: AssessmentSuite["questions"][number]["type"]): string {
+  if (type === "choice") {
+    return "选择题";
+  }
+  if (type === "blank") {
+    return "填空题";
+  }
+  return "计算题";
 }

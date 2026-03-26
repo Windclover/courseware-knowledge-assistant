@@ -17,6 +17,24 @@ export interface SectionNote {
   title: string;
   detailed_explanation: string;
   key_points: string[];
+  formula_notes: FormulaNote[];
+  worked_examples: WorkedExample[];
+  source_refs: string[];
+}
+
+export interface FormulaNote {
+  title: string;
+  latex: string;
+  raw_text: string;
+  explanation: string;
+  source_refs: string[];
+}
+
+export interface WorkedExample {
+  title: string;
+  problem: string;
+  steps: string[];
+  final_answer: string;
   source_refs: string[];
 }
 
@@ -84,12 +102,14 @@ export interface AssessmentQuestionOption {
 
 export interface AssessmentQuestion {
   id: string;
-  type: "choice" | "blank";
+  type: "choice" | "blank" | "calculation";
   prompt: string;
   options: AssessmentQuestionOption[];
   answer: string;
+  display_answer: string;
   acceptable_answers: string[];
   explanation: string;
+  solution_steps: string[];
 }
 
 export interface AssessmentSuite {

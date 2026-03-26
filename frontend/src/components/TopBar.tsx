@@ -1,7 +1,4 @@
-import type { DocumentDetail } from "../types";
-
 type TopBarProps = {
-  documentDetail: DocumentDetail | null;
   uploadInputId: string;
   uploading: boolean;
   canExport: boolean;
@@ -9,7 +6,7 @@ type TopBarProps = {
 };
 
 export function TopBar(props: TopBarProps) {
-  const { documentDetail, uploadInputId, uploading, canExport, onExport } = props;
+  const { uploadInputId, uploading, canExport, onExport } = props;
 
   return (
     <header className="topbar">
@@ -24,11 +21,6 @@ export function TopBar(props: TopBarProps) {
       </div>
 
       <div className="topbar-meta">
-        <div className="document-summary-chip">
-          <span className="chip-label">当前课件</span>
-          <strong>{documentDetail?.title ?? "未选择课件"}</strong>
-          <small>{documentDetail?.original_filename ?? "上传后自动生成学习笔记"}</small>
-        </div>
         <div className="topbar-actions">
           <label className="action-button is-primary" htmlFor={uploadInputId}>
             {uploading ? "处理中…" : "上传课件"}

@@ -110,8 +110,9 @@ def save_sections(document_id: str, sections: Iterable[GeneratedSection]) -> Non
         connection.executemany(
             """
             INSERT INTO sections (
-                document_id, section_index, title, detailed_explanation, key_points_json, quiz_json, source_refs_json
-            ) VALUES (?, ?, ?, ?, ?, ?, ?)
+                document_id, section_index, title, detailed_explanation, key_points_json,
+                formula_notes_json, worked_examples_json, quiz_json, source_refs_json
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
             """,
             [
                 (
@@ -120,6 +121,14 @@ def save_sections(document_id: str, sections: Iterable[GeneratedSection]) -> Non
                     section.title,
                     section.detailed_explanation,
                     json.dumps(section.key_points, ensure_ascii=False),
+                    json.dumps(
+                        [item.model_dump() for item in section.formula_notes],
+                        ensure_ascii=False,
+                    ),
+                    json.dumps(
+                        [item.model_dump() for item in section.worked_examples],
+                        ensure_ascii=False,
+                    ),
                     json.dumps([], ensure_ascii=False),
                     json.dumps(section.source_refs, ensure_ascii=False),
                 )
@@ -278,6 +287,8 @@ def _build_section_note(row) -> SectionNote:
         title=row["title"],
         detailed_explanation=row["detailed_explanation"],
         key_points=json.loads(row["key_points_json"]),
+        formula_notes=json.loads(row["formula_notes_json"] or "[]"),
+        worked_examples=json.loads(row["worked_examples_json"] or "[]"),
         source_refs=json.loads(row["source_refs_json"]),
     )
 

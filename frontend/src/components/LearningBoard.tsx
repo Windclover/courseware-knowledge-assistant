@@ -213,7 +213,7 @@ export function LearningBoardPanel(props: LearningBoardPanelProps) {
                 </header>
                 <p className="overview-paragraph">
                   {assessmentLoading
-                    ? "正在根据课件内容生成选择题和填空题，请稍等。"
+                    ? "正在根据课件内容生成选择题、填空题和计算题，请稍等。"
                     : assessment?.intro ??
                       "完成学习任务后，这里会自动生成测试题帮助你检查掌握程度。"}
                 </p>
@@ -231,7 +231,12 @@ export function LearningBoardPanel(props: LearningBoardPanelProps) {
                     <article key={question.id} className="assessment-card">
                       <div className="assessment-head">
                         <span className="module-kicker">
-                          {question.type === "choice" ? "选择题" : "填空题"} · 第 {index + 1} 题
+                          {question.type === "choice"
+                            ? "选择题"
+                            : question.type === "blank"
+                              ? "填空题"
+                              : "计算题"}{" "}
+                          · 第 {index + 1} 题
                         </span>
                         {assessmentSubmitted && assessmentResults ? (
                           <span
@@ -275,14 +280,30 @@ export function LearningBoardPanel(props: LearningBoardPanelProps) {
                             onAnswerChange(question.id, event.target.value)
                           }
                           disabled={assessmentSubmitted}
-                          placeholder="输入你的答案"
+                          placeholder={
+                            question.type === "calculation" ? "输入计算结果" : "输入你的答案"
+                          }
                         />
                       )}
 
                       {assessmentSubmitted ? (
                         <div className="explanation-box">
+                          <p>
+                            <strong>标准答案：</strong>
+                            {question.display_answer || question.answer}
+                          </p>
                           <strong>题目解析</strong>
                           <p>{question.explanation}</p>
+                          {question.solution_steps.length ? (
+                            <div className="solution-steps">
+                              <strong>参考步骤</strong>
+                              <ol>
+                                {question.solution_steps.map((step, stepIndex) => (
+                                  <li key={`${question.id}-${stepIndex}`}>{step}</li>
+                                ))}
+                              </ol>
+                            </div>
+                          ) : null}
                         </div>
                       ) : null}
                     </article>

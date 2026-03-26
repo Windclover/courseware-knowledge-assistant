@@ -885,6 +885,17 @@ label[for] {
   line-height: 1.7;
 }
 
+.solution-steps {
+  margin-top: 12px;
+}
+
+.solution-steps ol {
+  margin: 8px 0 0 18px;
+  padding: 0;
+  color: var(--ink-soft);
+  line-height: 1.7;
+}
+
 .empty-card {
   display: grid;
   gap: 6px;

@@ -66,11 +66,11 @@ fi
 
 if [[ ! -f "$ROOT_DIR/.env" ]]; then
   cp "$ROOT_DIR/.env.example" "$ROOT_DIR/.env"
-  echo "[info] 已自动创建 .env，请先补充 QWEN_API_KEY：$ROOT_DIR/.env"
+  echo "[info] 已自动创建 .env，请先补充 OPENAI_API_KEY：$ROOT_DIR/.env"
 fi
 
-if ! grep -Eq '^QWEN_API_KEY=.+$' "$ROOT_DIR/.env"; then
-  echo "[warn] .env 中还没有填写 QWEN_API_KEY，界面可以打开，但上传生成会失败。"
+if ! grep -Eq '^OPENAI_API_KEY=.+$' "$ROOT_DIR/.env"; then
+  echo "[warn] .env 中还没有填写 OPENAI_API_KEY，界面可以打开，但上传生成会失败。"
 fi
 
 if [[ ! -d "$FRONTEND_DIR/node_modules" ]]; then
